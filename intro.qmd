@@ -1,9 +1,11 @@
-# Introduction
+# Introducción
 
-This is a book created from markdown and executable code.
+![Este es el pie de foto de mi imagen](images/imagen1.jpg){width="70%"}
 
-See @knuth84 for additional discussion of literate programming.
+::: {style="text-align: justify;"}
+La desnutrición infantil es una condición que surge por el consumo insuficiente de alimentos, tanto en cantidad como en calidad, y por la presencia recurrente de enfermedades infecciosas y factores sociales adversos que afectan el estado nutricional de la niñez. Este problema impacta principalmente a niñas y niños en sus primeros años de vida y genera graves consecuencias en su desarrollo físico y cognitivo, dependiendo de la severidad. En casos extremos, puede llevar a la muerte si no se recibe atención adecuada y oportuna[@OMS2024; @UNICEF2019].
 
-```{r}
-1 + 1
-```
+De acuerdo con el Fondo de las Naciones Unidas para la Infancia (UNICEF), un niño que sufre desnutrición aguda grave tiene hasta nueve veces más probabilidad de morir en comparación con uno que tiene un estado nutricional normal. Esta forma de desnutrición altera todos los procesos vitales y requiere intervención médica urgente[@INS2024; @UNICEF2019].
+
+Por ello, es fundamental que padres, madres y cuidadores reconozcan las principales causas y tipos de la desnutrición infantil. Estos incluyen la desnutrición aguda (peso bajo para la talla), desnutrición crónica (retraso del crecimiento) y la deficiencia de micronutrientes como vitaminas y minerales, cada una con señales y consecuencias específicas. Identificar tempranamente los signos de alerta —como pérdida rápida de peso, retraso en el crecimiento o alteraciones clínicas evidentes— permite consultar oportunamente al profesional de salud y evitar complicaciones graves[@UNICEF2019; @MINSALUD2016; @INS2024; @OMS2024].
+:::

@@ -1,0 +1,1210 @@
+---
+title: "Análisis Exploratorio de Datos"
+format: html
+---
+
+**Fundamentos del Análisis: Una Mirada Inicial a los Datos**
+
+::: {style="text-align: justify;"}
+Este Análisis Exploratorio de Datos (EDA) parte de la base de datos de desnutrición reportada al sistema nacional de vigilancia en salud - Sivigila[@INS2025Sivigila] en 2020, con el objetivo de construir un panorama claro y fiable de la situación. Para ello, se ha llevado a cabo un riguroso proceso de limpieza, estandarización y validación, sentando así las bases para los hallazgos que se presentan a continuación.
+
+En esta fase inicial, se ha evaluado la calidad de los datos, identificando las variables con mayor cantidad de valores ausentes para entender las limitaciones de la información. Se han estandarizado métricas clave, como la edad de los pacientes, para permitir comparaciones consistentes. Además, las primeras visualizaciones nos han ofrecido una perspectiva preliminar de la distribución del problema: se mapeo la concentración de casos a nivel departamental y analizado su evolución a lo largo de las semanas epidemiológicas del año.
+
+Estos primeros pasos no solo han depurado el conjunto de datos, sino que también han revelado los patrones iniciales que guían las secciones subsecuentes de este informe. Con una base de datos sólida y una comprensión inicial de sus características, ahora podemos profundizar en el análisis para descubrir las relaciones y factores subyacentes a este desafío de salud pública.
+:::
+
+## Descipción de Datos
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+#| warning: false
+
+# Paquetes requeridos
+required <- c(
+  "tidyverse", "readxl", "janitor", "skimr", "gt",
+  "gtsummary", "naniar", "ggcorrplot", "forcats", "stringr","dplyr","tibble",
+  "kableExtra","tidyr","gt","scales","purrr","scales","htmltools","purrr","DT","reactable","naniar","DataExplorer","naniar","summarytools","ggplot2", "lubridate","janitor","plotly","corrplot","corrplot","labelled","cardx","janitor","lubridate","giscoR","sf","tmap","gtExtras"
+)
+
+to_install <- setdiff(required, rownames(installed.packages()))
+if (length(to_install)) install.packages(to_install, quiet = TRUE)
+
+# Cargar
+invisible(lapply(required, library, character.only = TRUE))
+theme_set(theme_minimal(base_size = 12))
+```
+
+```{r}
+#| label: DataSet
+#| echo: false
+#| message: false
+#| warning: false
+library(readxl)
+Desnutricion <- read_excel("~/GitHub/Proyectos_Bioestadistica/Datas/Datos_2020_113.xlsx")
+```
+
+```{r}
+#| label: tipificar_auto_numericas
+#| eval: false
+#| message: false
+#| warning: false
+#| include: false
+
+library(dplyr)
+library(stringr)
+
+# --- Paso 1: Definir patrones para excluir columnas que no deben convertirse ---
+# Se excluyen códigos, IDs, fechas, y otras variables que pueden contener números
+# pero no son numéricas en su naturaleza.
+pat_excl <- "(^cod_)|(^consecutive)|(^consecutive_origen$)|(^uni_med$)|(^estrato$)|(^gp_)|(^tip_)|(^nom_)|(^va_sispro$)|(^fec_)|fecha|_fec$|^ini_sin$|^semana$|^ano$"
+
+# --- Paso 2: Identificar columnas candidatas para la conversión ---
+# Se buscan columnas de tipo texto o factor que NO coincidan con los patrones de exclusión.
+cand_charfac <- names(select(Desnutricion, where(~ is.factor(.x) || is.character(.x))))
+cand_charfac <- cand_charfac[!str_detect(cand_charfac, pat_excl)]
+
+# --- Paso 3: Verificar si el contenido de las columnas parece numérico ---
+# Se revisa si al menos el 95% de los valores en cada columna candidata
+# tienen formato de número (incluyendo decimales con punto o coma).
+num_like <- cand_charfac[sapply(Desnutricion[cand_charfac], function(x){
+  y <- as.character(x)
+  y <- trimws(y)
+  # La expresión regular busca números, opcionalmente con signo y decimales.
+  ok <- grepl("^[-+]?[0-9]+([.,][0-9]+)?$", y) | is.na(y)
+  # Se considera numérica si el 95% o más de sus datos cumplen el formato.
+  mean(ok, na.rm = TRUE) >= 0.95
+})]
+
+# --- Paso 4: Convertir las columnas identificadas ---
+# Si se encontraron columnas que parecen números, se convierten a tipo numérico.
+# gsub(",", ".", ...) se asegura de que los decimales con coma se conviertan correctamente.
+if (length(num_like) > 0) {
+  Desnutricion <- Desnutricion %>%
+    mutate(across(all_of(num_like), ~ as.numeric(gsub(",", ".", as.character(.x)))))
+  
+  # Mensaje informativo para el usuario
+  print(paste("Se convirtieron a numérico las siguientes columnas:", paste(num_like, collapse = ", ")))
+} else {
+  print("No se encontraron columnas de texto que parecieran ser numéricas para convertir.")
+}
+
+# --- Paso 5: (Opcional) Recalcular listas de tipos de variables ---
+# Esto es útil si necesitas estas listas actualizadas para pasos posteriores.
+num_vars  <- names(select(Desnutricion, where(is.numeric)))
+cat_vars  <- names(select(Desnutricion, where(~ is.factor(.x) || is.character(.x))))
+logi_vars <- names(select(Desnutricion, where(is.logical)))
+```
+
+```{r}
+#| label: tipos_vars
+#| eval: false
+#| message: false
+#| warning: false
+#| include: false
+
+library(dplyr)
+library(gt)
+library(stringr)
+
+total_vars <- ncol(Desnutricion)
+
+num_vars  <- names(dplyr::select(Desnutricion, where(is.numeric)))
+cat_vars  <- names(dplyr::select(Desnutricion, where(~ is.factor(.x) || is.character(.x))))
+logi_vars <- names(dplyr::select(Desnutricion, where(is.logical)))
+date_vars <- names(dplyr::select(Desnutricion, where(~ inherits(.x, "Date") || inherits(.x, "POSIXct"))))
+
+# Helper para ejemplos (primeros hasta 6 nombres)
+ej <- function(v) if (length(v) == 0) "—" else paste(head(v, 6), collapse = ", ")
+
+tipos_tbl <- tibble::tibble(
+  `Tipo de variable` = c("Numéricas", "Categóricas", "Lógicas", "Fecha / Fecha-hora"),
+  `Conteo`           = c(length(num_vars), length(cat_vars), length(logi_vars), length(date_vars)),
+  `% sobre total`    = c(length(num_vars), length(cat_vars), length(logi_vars), length(date_vars)) / total_vars * 100,
+  `Ejemplos`         = c(ej(num_vars), ej(cat_vars), ej(logi_vars), ej(date_vars))
+) |>
+  dplyr::filter(`Conteo` > 0) |>
+  dplyr::arrange(desc(`Conteo`))
+
+# Paleta para el % (profesional, sutil)
+pal <- scales::col_numeric(
+  palette = c("#f7fbff", "#c6dbef", "#6baed6", "#3182bd", "#08519c"),
+  domain  = range(tipos_tbl$`% sobre total`, na.rm = TRUE)
+)
+
+gt(tipos_tbl) |>
+  gt::tab_header(
+    title = md("**Tipología de variables**"),
+    subtitle = md(paste0("Total de variables: **", total_vars, "**"))
+  ) |>
+  gt::fmt_number(columns = "% sobre total", decimals = 1) |>
+  gt::cols_align(align = "right", columns = c("Conteo", "% sobre total")) |>
+  gt::data_color(columns = "% sobre total", colors = pal) |>
+  gt::cols_width(
+    `Tipo de variable` ~ gt::px(180),
+    `Conteo`           ~ gt::px(100),
+    `% sobre total`    ~ gt::px(140),
+    `Ejemplos`         ~ gt::px(800)
+  ) |>
+  gt::tab_options(
+    table.font.size = gt::px(12),
+    table.width = gt::pct(100),
+    heading.title.font.size = gt::px(16),
+    heading.subtitle.font.size = gt::px(12),
+    data_row.padding = gt::px(4)
+  ) |>
+  gt::opt_row_striping() |>
+  gt::tab_source_note(
+    md("Nota: las variables **categóricas** incluyen `factor` y `character`; las **fecha** incluyen `Date` y `POSIXct`.")
+  )
+
+```
+
+```{r}
+#| label: carga_datos
+#| eval: false
+#| message: false
+#| warning: false
+#| include: false
+
+library(readxl)
+library(dplyr)
+library(janitor)
+library(gt)
+library(stringr)
+
+# ---- Ruta del archivo establecida ----
+# El código ahora apunta directamente a la ruta que proporcionaste.
+ruta_archivo <- "~/GitHub/Proyectos_Bioestadistica/Datas/Datos_2020_113.xlsx"
+
+stopifnot("El archivo no existe en la ruta indicada." = file.exists(ruta_archivo))
+
+# Se cambió el nombre de la variable de 'Datos' a 'Desnutricion' para consistencia
+# con el resto de tus scripts.
+Desnutricion <- readxl::read_excel(ruta_archivo, sheet = "Hoja1") |>
+  janitor::clean_names() |>
+  mutate(across(where(is.character), ~na_if(trimws(.x), "")))
+
+# ---- Selección "curada" de variables para vista profesional (si existen) ----
+prioridad <- c(
+  # Identificación
+  "consecutive","consecutive_origen","cod_eve",
+  # Tiempo
+  "fec_not","ini_sin","fec_hos","fec_con","fec_def","ano","semana",
+  # Caso / resultado
+  "estado_final_de_caso","nom_est_f_caso","tip_cas","pac_hos","con_fin","nombre_evento","nom_upgd",
+  # Persona
+  "edad","sexo","gru_pob","nom_grupo",
+  # Geografía de ocurrencia
+  "pais_ocurrencia","departamento_ocurrencia","municipio_ocurrencia",
+  # Geografía de residencia
+  "pais_residencia","departamento_residencia","municipio_residencia",
+  # Notificación
+  "departamento_notificacion","municipio_notificacion"
+)
+
+cols_presentes <- intersect(prioridad, names(Desnutricion))
+vista <- if (length(cols_presentes) > 0) {
+  select(Desnutricion, all_of(cols_presentes))
+} else {
+  select(Desnutricion, 1:min(12, ncol(Desnutricion)))
+}
+
+# Índice tipo “Caso #”
+vista <- tibble::rowid_to_column(vista, "Caso")
+
+# Detectar posibles columnas de fecha por patrón en el nombre
+cols_fecha_pat <- c("^fec_", "fecha", "_fec$", "^ini_sin$")
+es_fecha <- Reduce(`|`, lapply(cols_fecha_pat, \(p) str_detect(names(vista), p)))
+cols_fecha <- names(vista)[es_fecha]
+
+# Intentar convertir a Date si no lo están
+if (length(cols_fecha) > 0) {
+  vista <- vista |>
+    mutate(across(all_of(cols_fecha), \(x) suppressWarnings(as.Date(x))))
+}
+
+# Columnas “código/ID” para monoespaciado
+cols_codigo <- intersect(c("consecutive","consecutive_origen","cod_eve"), names(vista))
+
+# Columnas numéricas (sin el índice)
+cols_num <- setdiff(names(vista)[sapply(vista, is.numeric)], "Caso")
+
+# Construcción base de la tabla
+tab <- gt::gt(head(vista, 10)) |>
+  gt::cols_label(
+    Caso = "Caso #",
+    consecutive = "Consecutivo",
+    consecutive_origen = "Consecutivo (Origen)",
+    cod_eve = "Código Evento",
+    fec_not = "Fecha Notif.",
+    ini_sin = "Inicio Sínt.",
+    fec_hos = "Fecha Hospitalización",
+    fec_con = "Fecha Consulta",
+    fec_def = "Fecha Defunción",
+    ano = "Año",
+    semana = "Semana",
+    estado_final_de_caso = "Estado Final",
+    nom_est_f_caso = "Etiqueta Estado",
+    tip_cas = "Tipo de Caso",
+    pac_hos = "Hospitalizado",
+    con_fin = "Condición Final",
+    nombre_evento = "Evento",
+    nom_upgd = "UPGD",
+    edad = "Edad",
+    sexo = "Sexo",
+    gru_pob = "Grupo Poblacional",
+    nom_grupo = "Nombre Grupo",
+    pais_ocurrencia = "País Ocurrencia",
+    departamento_ocurrencia = "Depto. Ocurrencia",
+    municipio_ocurrencia = "Mpio. Ocurrencia",
+    pais_residencia = "País Residencia",
+    departamento_residencia = "Depto. Residencia",
+    municipio_residencia = "Mpio. Residencia",
+    departamento_notificacion = "Depto. Notificación",
+    municipio_notificacion = "Mpio. Notificación"
+  ) |>
+  gt::tab_header(
+    title    = md("**Muestra de registros (10 primeras filas)**"),
+    subtitle = md(paste0(
+      "Fuente: `", basename(ruta_archivo),
+      "`. Variables clave de identificación, tiempo, geografía y estado del caso."
+    ))
+  ) |>
+  gt::opt_row_striping() |>
+  gt::opt_align_table_header(align = "left") |>
+  gt::tab_options(
+    table.font.size = gt::px(12),
+    table.width = gt::pct(100),
+    heading.title.font.size = gt::px(16),
+    heading.subtitle.font.size = gt::px(12),
+    data_row.padding = gt::px(4)
+  )
+
+# Aplicar formatos condicionalmente (fuera del pipe para evitar el error)
+if (length(cols_fecha) > 0) {
+  tab <- gt::fmt_date(tab, columns = all_of(intersect(cols_fecha, names(vista))), date_style = "yMd")
+}
+if (length(cols_num) > 0) {
+  tab <- gt::fmt_number(tab, columns = all_of(cols_num), decimals = 0, use_seps = TRUE)
+}
+if (length(cols_codigo) > 0) {
+  tab <- gt::tab_style(
+    tab,
+    style = list(gt::cell_text(font = "ui-monospace")),
+    locations = list(gt::cells_body(columns = all_of(cols_codigo)))
+  )
+}
+
+# Control de anchos: calcula columnas de fecha para ajustar
+cols_fecha_presentes <- intersect(cols_fecha, names(vista))
+if (length(cols_fecha_presentes) > 0) {
+  tab <- gt::cols_width(
+    tab,
+    Caso ~ gt::px(70),
+    all_of(cols_fecha_presentes) ~ gt::px(130),
+    everything() ~ gt::px(160)
+  )
+} else {
+  tab <- gt::cols_width(
+    tab,
+    Caso ~ gt::px(70),
+    everything() ~ gt::px(160)
+  )
+}
+
+tab <- gt::tab_source_note(
+  tab,
+  md("Nota: Vista preliminar para control de calidad del cargue (IDs, fechas, georreferenciación y estado del caso).")
+)
+
+tab
+
+```
+
+### Dimensiones, tipos y resumen
+
+```{r}
+#| label: overview
+#| echo: false
+#| message: false
+#| warning: false
+#| layout-ncol: 2
+
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(gt)
+
+# Dimensiones
+dimensiones <- tibble(
+  Registros = nrow(Desnutricion),
+  Variables = ncol(Desnutricion)
+)
+
+# Conteo por tipo (robusto a Date y POSIXct)
+tipos_tbl <- tibble(
+  `Tipo de variable` = c("Numéricas", "Categóricas", "Lógicas", "Fecha / Fecha-hora"),
+  Conteo = c(
+    sum(purrr::map_lgl(Desnutricion, is.numeric)),
+    sum(purrr::map_lgl(Desnutricion, ~ is.factor(.x) || is.character(.x))),
+    sum(purrr::map_lgl(Desnutricion, is.logical)),
+    sum(purrr::map_lgl(Desnutricion, ~ inherits(.x, "Date") || inherits(.x, "POSIXct")))
+  )
+) |>
+  mutate(`% sobre total` = round(100 * Conteo / ncol(Desnutricion), 1))
+
+# Tabla 1: Dimensiones
+t1 <- gt(dimensiones) |>
+  tab_header(title = md("**Dimensiones del dataset**")) |>
+  cols_align("right") |>
+  tab_options(table.font.size = px(12), heading.title.font.size = px(16))
+
+# Tabla 2: Tipos
+pal <- scales::col_numeric(
+  palette = c("#f7fbff", "#c6dbef", "#6baed6", "#3182bd", "#08519c"),
+  domain  = range(tipos_tbl$`% sobre total`, na.rm = TRUE)
+)
+
+t2 <- gt(tipos_tbl) |>
+  tab_header(title = md("**Variables por tipo**")) |>
+  fmt_number(columns = "% sobre total", decimals = 1) |>
+  cols_align(align = "right", columns = c("Conteo", "% sobre total")) |>
+  data_color(columns = "% sobre total", colors = pal) |>
+  cols_width(
+    `Tipo de variable` ~ px(180),
+    Conteo ~ px(100),
+    `% sobre total` ~ px(140)
+  ) |>
+  tab_options(table.font.size = px(12), heading.title.font.size = px(16)) |>
+  opt_row_striping() |>
+  
+  gt::opt_row_striping() |>
+  gt::tab_source_note(
+    md("Nota: las variables **categóricas** incluyen `factor` y `character`; las **fecha** incluyen `Date` y `POSIXct`.")
+  )
+t1
+t2
+
+```
+
+::: {style="text-align: justify;"}
+La tabla anterior nos ofrece una radiografía inicial de la estructura de nuestros datos, revelando dos puntos clave: dimensiones del conjunto de datos y predominio de variables categórica, esta primera vista nos confirma que, si bien los datos son ricos en descriptores, requieren un tratamiento cuidadoso para asegurar que cada variable sea interpretada correctamente antes de proceder con análisis más complejos.
+:::
+
+### Diccionario de variables
+
+```{r}
+#| label: Diccionario_Variables
+#| echo: false
+#| message: false
+#| warning: false
+#| paged-print: true
+
+# --- 1. Carga de Librerías ---
+# Usaremos 'gt' para crear la tabla de calidad de publicación.
+# Si no lo tienes, instálalo con: install.packages("gt")
+library(gt)
+library(dplyr)
+
+# --- 2. Creación del Diccionario de Variables ---
+# Creamos el dataframe con los nombres y significados.
+diccionario <- data.frame(
+  `Nombre de la Variable` = c(
+    "FEC_NOT", "SEMANA", "EDAD", "UNI_MED", "SEXO", "AREA",
+    "PER_ETN", "estrato", "Departamento_ocurrencia",
+    "Municipio_ocurrencia", "Estado_final_de_caso"
+  ),
+  `Significado de la Variable` = c(
+    "Fecha de Notificación",
+    "Semana epidemiológica según calendario vigente",
+    "Edad del paciente",
+    "Unidad de medida de la edad (1: Años, 2: Meses, 3: Días)",
+    "Sexo del paciente (M = Hombre - F = Mujer)",
+    "Área de ocurrencia del caso (1: Cabecera, 2: C. Poblado, 3: Rural)",
+    "Pertenencia Étnica",
+    "Estrato socioeconómico",
+    "Departamento de ocurrencia del caso",
+    "Municipio de ocurrencia del caso",
+    "Estado final del paciente (ej. Vivo, Muerto)"
+  )
+)
+
+diccionario %>%
+  gt() %>%
+  # Añadimos el título y subtítulo
+  tab_header(
+    title = md("**Variables de Estudio**"),
+    subtitle = "Seleccionadas para el análisis de desnutrición aguda"
+  ) %>%
+  # Añadimos la fuente en el pie de página, incluyendo el enlace.
+  # Usamos Markdown (md) para crear el hipervínculo.
+  tab_source_note(
+    source_note = md(
+      "**Fuente:** [Estructura de los registros de notificación, SIVIGILA (Instituto Nacional de Salud)](https://www.ins.gov.co/Direcciones/Vigilancia/sivigila/Documents/Anexo%202%20Estructura%20de%20los%20registros%20de%20notificaci%C3%B3n.pdf)"
+    )
+  ) %>%
+  # Renombramos las columnas para un formato más limpio
+  cols_label(
+    Nombre.de.la.Variable = md("**Variable**"),
+    Significado.de.la.Variable = md("**Significado**")
+  ) %>%
+  # Opciones de estilo para un look de publicación
+  tab_options(
+    table.border.top.color = "black",
+    column_labels.border.bottom.color = "black",
+    table_body.hlines.color = "#f2f2f2"
+  )
+```
+
+**Criterios para la Selección de Variables**
+
+::: {style="text-align: justify;"}
+La selección inicial de variables se basa en los pilares epidemiológicos de tiempo, persona y lugar.
+
+Se eligieron variables temporales (`FEC_NOT`, `SEMANA`) para analizar la estacionalidad del evento; demográficas (`EDAD`, `SEXO`, `PER_ETN`) para definir los perfiles de mayor riesgo; y geográficas (`Departamento_ocurrencia`, `AREA`, `estrato`) para identificar focos de concentración y el contexto socioeconómico. Adicionalmente, se incluyó el `Estado_final_de_caso` para evaluar la severidad.
+
+Este conjunto enfocado proporciona un marco de análisis robusto para una primera exploración. Es un punto de partida que podrá ampliarse con otras variables si análisis posteriores así lo requieren.
+:::
+
+### Datos Faltantes
+
+```{r}
+#| label: Top de Valores Faltantes
+#| echo: false
+#| message: false
+#| warning: false
+
+# --- PASO 1: Cargar Librerías ---
+# 'knitr' es excelente para crear tablas limpias y profesionales.
+# Si no la tienes, ejecuta una vez: install.packages(c("dplyr", "knitr"))
+library(dplyr)
+library(knitr)
+
+# --- PASO 2: Calcular y Formatear los Datos Faltantes ---
+# Tomamos tu código original y lo convertimos en un dataframe para la tabla.
+tabla_faltantes <- colSums(is.na(Desnutricion)) %>%
+  sort(decreasing = TRUE) %>%
+  head(20) %>%
+  # Convertimos el resultado a un dataframe con nombres de columna claros.
+  data.frame(
+    "Variable" = names(.),
+    "Cantidad de Datos Faltantes" = .
+  ) %>%
+  # Quitamos los nombres de las filas que ya no son necesarios.
+  tibble::remove_rownames()
+
+# --- PASO 3: Crear y Mostrar la Tabla Profesional ---
+# kable() es la función que genera la tabla con un formato limpio.
+kable(
+  tabla_faltantes,
+  caption = "Top 20 Variables con Mayor Cantidad de Datos Faltantes",
+  col.names = c("Variable", "Cantidad de Faltantes"),
+  align = c("l", "c") # Alineamos la primera columna a la izquierda y la segunda al centro.
+) 
+
+```
+
+```{r}
+#| label: Datos Faltantes
+#| echo: false
+#| message: false
+#| warning: false
+# --- PASO 1: Cargar Librerías ---
+# Para este gráfico, solo necesitamos dplyr y ggplot2.
+library(dplyr)
+library(ggplot2)
+
+# --- PASO 2: Analizar los Datos Faltantes de 'estrato' ---
+# Creamos una tabla que cuenta cuántos valores de 'estrato' son NA (Faltante)
+# y cuántos no lo son (Presente).
+conteo_faltantes_estrato <- Desnutricion %>%
+  mutate(
+    estado_dato = ifelse(is.na(estrato), "Dato Faltante", "Dato Presente")
+  ) %>%
+  count(estado_dato, name = "conteo") %>%
+  # Calculamos el porcentaje para cada categoría para dar más contexto.
+  mutate(
+    porcentaje = conteo / sum(conteo)
+  )
+
+# --- PASO 3: Crear el Gráfico de Barras ---
+# Esta es la visualización más adecuada y profesional cuando solo 
+# una variable tiene datos faltantes.
+ggplot(conteo_faltantes_estrato, aes(x = estado_dato, y = conteo, fill = estado_dato)) +
+  geom_col(show.legend = FALSE, alpha = 0.9, width = 0.6) +
+  
+  # Añadimos etiquetas claras con el conteo y el porcentaje.
+  geom_text(
+    aes(label = paste0(format(conteo, big.mark = "."), "\n(", scales::percent(porcentaje, accuracy = 0.1), ")")),
+    vjust = -0.4,
+    size = 4,
+    fontface = "bold",
+    color = "black"
+  ) +
+  
+  # Usamos colores distintivos y profesionales.
+  scale_fill_manual(values = c("Dato Faltante" = "#e41a1c", "Dato Presente" = "#377eb8")) +
+  
+  labs(
+    title = "Análisis de Datos Faltantes en la Variable 'Estrato'",
+    subtitle = "Conteo y porcentaje de valores presentes vs. ausentes en el conjunto de datos",
+    x = NULL, # El eje X es autoexplicativo, no necesita título.
+    y = "Número de Registros",
+    caption = "Fuente: Datos de Desnutrición."
+  ) +
+  
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5),
+    panel.grid.major.x = element_blank(),
+    axis.text = element_text(face = "bold")
+  ) +
+  
+  # Nos aseguramos de que haya espacio suficiente para las etiquetas.
+  scale_y_continuous(expand = expansion(mult = c(0, 0.21)))
+```
+
+::: {style="text-align: justify;"}
+Este gráfico valida el uso de la variable '`Estrato`' en el análisis.
+
+A diferencia de otras variables socioeconómicas que fueron descartadas por ausencia total de datos, 'Estrato' está completo en un 94.6%. El 5.4% de datos faltantes se considera una proporción minoritaria y manejable, lo que confirma la fiabilidad de esta variable para el estudio.
+:::
+
+## Distribuciones
+
+### Distribución de casos por meses y semana
+
+```{r}
+#| label: casos-por-mes
+#| echo: false
+#| message: false
+#| warning: false
+
+# Data
+Desnutricion <- read_excel("~/GitHub/Proyectos_Bioestadistica/Datas/Datos_2020_113.xlsx")
+
+Desnutricion %>%
+  mutate(
+    FEC_NOT = as.Date(FEC_NOT),
+    mes = lubridate::month(FEC_NOT, label = TRUE, abbr = FALSE)
+  ) %>%
+  group_by(mes) %>%
+  summarise(total = n(), .groups = 'drop') %>%
+  ggplot(aes(x = mes, y = total)) +
+  geom_col(fill = "steelblue") +
+  # Esta línea añade las etiquetas sobre cada barra
+  geom_text(aes(label = total), vjust = -0.5) + 
+  labs(
+    title = "Casos de desnutrición aguda por mes en 2020",
+    x = "Mes",
+    y = "Número de casos",
+    # CORRECCIÓN: Añadimos la fuente de los datos en el pie del gráfico
+    caption = "Fuente: Sistema de Vigilancia en Salud Pública (SIVIGILA)."
+  ) +
+  # Ajustamos el límite del eje Y para dar más espacio
+  scale_y_continuous(limits = c(0, 2000)) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    # Ajustamos la apariencia del pie de página
+    plot.caption = element_text(hjust = 0, face = "italic", color = "grey50")
+  )
+```
+
+::: {style="text-align: justify;"}
+El año 2020 presentó dos picos de casos de desnutrición. El más alto ocurrió al inicio del año, en `enero` y `febrero`, superando los 1,400 casos mensuales.
+
+Un segundo pico, de menor intensidad, se registró en `octubre`. El mes con la menor cantidad de casos fue `abril`.
+:::
+
+### Distribución por edad y sexo
+
+```{r}
+#| label: Distribución por edad y sexo
+#| echo: false
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+
+Desnutricion %>%
+  mutate(EDAD = as.numeric(as.character(EDAD))) %>%
+  filter(EDAD <= 5, !is.na(SEXO)) %>%
+  ggplot(aes(x = EDAD, fill = SEXO)) +
+  geom_histogram(binwidth = 1, alpha = 0.9, position = "dodge", color = "black") +
+  
+  # MEJORA 1: Añadimos las etiquetas de texto sobre cada barra.
+  # CORRECCIÓN: Solo mostramos la etiqueta si el conteo es mayor a 0.
+  geom_text(
+    stat = "bin", 
+    aes(label = ifelse(..count.. > 0, ..count.., NA)), # <-- AQUÍ ESTÁ EL ARREGLO
+    position = position_dodge(width = 1), 
+    vjust = -0.5,
+    fontface = "bold"
+  ) +
+  
+  # MEJORA 2: Usamos una paleta de colores con dos tonos de azul.
+  scale_fill_manual(
+    values = c("M" = "#0d47a1", "F" = "#42a5f5"),
+    labels = c("M" = "Masculino", "F" = "Femenino")
+  ) +
+  
+  labs(
+    title = "Distribución de Casos de Desnutrición Aguda por Edad y Sexo",
+    subtitle = "Menores de 5 años, Colombia 2020",
+    x = "Edad (años)",
+    y = "Número de Casos",
+    fill = "Sexo"
+  ) +
+  
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    legend.position = "top"
+  ) +
+  
+  # Nos aseguramos de que haya espacio suficiente para las etiquetas.
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
+```
+
+::: {style="text-align: justify;"}
+La distribución de casos de desnutrición aguda se concentra de manera significativa en el primer año de vida, siendo este el grupo de edad con la mayor cantidad de reportes tanto para el sexo masculino (1,901 casos) como para el femenino (1,657 casos).
+
+A partir del primer año, el número de casos desciende progresivamente con la edad. Además, se observa una tendencia consistente: en casi todos los grupos de edad, el número de casos reportados en hombres es ligeramente superior al de las mujeres.
+:::
+
+### Distribución por Nacimientos
+
+```{r}
+#| label: Fecha de Nacimiento
+#| echo: false
+#| message: false
+#| warning: false
+# --- PASO 1: Cargar Librerías ---
+# Asegúrate de tener estas librerías instaladas. 'lubridate' es clave para manejar fechas.
+library(dplyr)
+library(ggplot2)
+library(lubridate) # La mejor librería para trabajar con fechas en R
+
+# --- PASO 2: Procesar los Datos de Fecha de Nacimiento ---
+# Convertimos la columna FECHA_NTO a un formato de fecha y contamos los casos por mes.
+casos_por_mes_nacimiento <- Desnutricion %>%
+  # CORRECCIÓN: Usamos una función más robusta para leer las fechas.
+  # parse_date_time() intentará varios formatos comunes automáticamente.
+  mutate(fecha_nacimiento = parse_date_time(FECHA_NTO, orders = c("dmy", "ymd", "mdy"))) %>%
+  filter(!is.na(fecha_nacimiento)) %>%
+  
+  # Extraemos el mes de la fecha de nacimiento.
+  # 'label = TRUE' y 'abbr = FALSE' nos da el nombre completo del mes (ej: "enero").
+  mutate(mes_nacimiento = month(fecha_nacimiento, label = TRUE, abbr = FALSE)) %>%
+  
+  # Contamos cuántos niños nacieron en cada mes.
+  count(mes_nacimiento, name = "numero_de_casos")
+
+# --- PASO 3: Crear el Gráfico Profesional ---
+# Si el paso anterior no generó datos, este gráfico saldrá vacío.
+# Puedes verificar si 'casos_por_mes_nacimiento' tiene datos ejecutándolo en la consola.
+if (nrow(casos_por_mes_nacimiento) > 0) {
+  ggplot(casos_por_mes_nacimiento, aes(x = mes_nacimiento, y = numero_de_casos)) +
+    geom_col(fill = "#2c7fb8", alpha = 0.9) +
+    
+    # Añadimos el número exacto de casos sobre cada barra para mayor claridad.
+    geom_text(
+      aes(label = format(numero_de_casos, big.mark = ".")), 
+      vjust = -0.5, # Ajusta la posición vertical del texto.
+      size = 3.5, 
+      color = "black",
+      fontface = "bold"
+    ) +
+    
+    labs(
+      title = "Número de Casos de Desnutrición por Mes de Nacimiento",
+      subtitle = "Análisis de la estacionalidad de nacimientos en la población de estudio",
+      x = "Mes de Nacimiento",
+      y = "Número de Casos Reportados",
+      caption = "Fuente: Datos de Desnutrición. Análisis interno."
+    ) +
+    
+    # Usamos un tema limpio y profesional.
+    theme_minimal(base_size = 14) +
+    theme(
+      plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+      plot.subtitle = element_text(size = 12, hjust = 0.5),
+      plot.caption = element_text(face = "italic", size = 9),
+      axis.text.x = element_text(angle = 45, hjust = 1), # Inclinamos las etiquetas del eje x.
+      panel.grid.major.x = element_blank(), # Quitamos las líneas verticales de la cuadrícula.
+      panel.grid.minor.y = element_blank()
+    ) +
+    
+    # Damos un poco más de espacio en la parte superior para que los números no se corten.
+    scale_y_continuous(expand = expansion(mult = c(0, 0.2)))
+} else {
+  print("No se pudieron procesar las fechas. Revisa el formato de la columna 'FECHA_NTO'.")
+}
+
+```
+
+::: {style="text-align: justify;"}
+Se observa una ligera tendencia al alza en los nacimientos de la segunda mitad del año, alcanzando el punto más alto en octubre con 1,001 casos. El mes con la menor cantidad de casos registrados corresponde a los nacidos en febrero (806 casos). En general, la distribución no sugiere una estacionalidad marcada en los nacimientos de la población afectada.
+:::
+
+## Localización
+
+### Distribución de Casos por Departamento
+
+```{r}
+#| label: Por Departamento
+#| echo: false
+#| message: false
+#| warning: false
+Desnutricion %>%
+  # Se usa el nombre de columna original en mayúscula
+  count(Departamento_ocurrencia) %>%
+  top_n(20, n) %>%
+  ggplot(aes(x = reorder(Departamento_ocurrencia, n), y = n)) +
+  geom_col(fill = "#2c7fb8") + # Un azul más profesional
+  
+  # LÍNEA AÑADIDA: Pone el número de casos sobre cada barra.
+  geom_text(aes(label = n), hjust = -0.2, color = "black", fontface = "bold") +
+  
+  coord_flip() +
+  labs(
+    title = "Top 20 Departamentos con Mayor Número de Casos", # Corregido a Top 20
+    x = "Departamento",
+    y = "Número de Casos"
+  ) +
+  
+  # Se añade un poco de espacio para que las etiquetas no se corten.
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  
+  theme_minimal(base_size = 11)
+```
+
+```{r}
+#| label: Tabla de Frecuencia
+#| echo: false
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(gt)
+library(gtExtras)
+library(scales)
+
+tabla_deptos <- Desnutricion %>%
+  # Se usa el nombre de columna original en mayúscula
+  count(Departamento_ocurrencia, name = "Frecuencia") %>%
+  # Calculamos el porcentaje sobre el total de casos.
+  mutate(Porcentaje = Frecuencia / sum(Frecuencia) * 100) %>%
+  # Ordenamos de mayor a menor y nos quedamos con los 20 primeros.
+  arrange(desc(Frecuencia)) %>%
+  top_n(20, Frecuencia)
+
+gt(tabla_deptos) %>%
+  tab_header(
+    title = md("**Top 20 Departamentos por Número de Casos Reportados**")
+  ) %>%
+  cols_label(
+    Departamento_ocurrencia = "Departamento",
+    Frecuencia = "Nº de Casos",
+    Porcentaje = "% del Total"
+  ) %>%
+  
+  fmt_number(
+    columns = Frecuencia,
+    decimals = 0,
+    use_seps = TRUE
+  ) %>%
+  
+  gt_plt_bar(
+  column = Porcentaje,
+  color = "#0d47a1",
+  background = "#deebf7",
+  scale_type = "number",
+  text_color = "white",
+  accuracy = 0.01,
+  fmt_fn = function(x) scales::percent(x / 100, accuracy = 0.01)
+) %>%
+  
+  cols_align(
+    align = "left",
+    columns = Departamento_ocurrencia
+  ) %>%
+  
+  cols_align(
+    align = "center",
+    columns = c(Frecuencia, Porcentaje)
+  ) %>%
+  
+  opt_row_striping() %>%
+  tab_options(
+    table.font.size = gt::px(10),
+    data_row.padding = gt::px(3)
+  )
+```
+
+### Geolocalización Nacional
+
+```{r}
+#| label: Mapa Interactivo 
+#| echo: false
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(sf)
+library(rnaturalearth)
+library(leaflet)
+library(htmltools)
+
+# --- PASO 2: Preparar los Datos de Desnutrición (SOLUCIÓN DEFINITIVA) ---
+# Se crea un vector de correcciones manuales
+mapeo_nombres <- c(
+  "Bogotá" = "BOGOTA DC",
+  "ARCHIPIELAGO DE SAN ANDRES, PROVIDENCIA Y SANTA CATALINA" = "ARCHIPIELAGO DE SAN ANDRES PROVIDENCIA Y SANTA CATALINA",
+  "VALLE" = "VALLE DEL CAUCA",
+  "SANTANDER" = "SANTANDER",
+  "NORTE SANTANDER" = "NORTE DE SANTANDER",
+  "GUAJIRA" = "LA GUAJIRA"
+)
+
+casos_por_depto <- Desnutricion %>%
+  count(Departamento_ocurrencia, name = "casos") %>%
+  mutate(
+    # Aplicamos la limpieza inicial
+    depto_join = toupper(Departamento_ocurrencia),
+    depto_join = trimws(depto_join), 
+    depto_join = iconv(depto_join, from = "UTF-8", to = "ASCII//TRANSLIT"),
+    depto_join = gsub("[[:punct:]]", "", depto_join), 
+    
+    # Esta es la parte clave: se aplica la corrección manual
+    depto_join = recode(depto_join, !!!mapeo_nombres)
+  )
+
+# --- PASO 3: Cargar el Mapa de Colombia (Sin cambios, ya que los nombres son estandarizados) ---
+mapa_colombia <- ne_states(country = "colombia", returnclass = "sf") %>%
+  mutate(
+    depto_join = toupper(name),
+    depto_join = trimws(depto_join), 
+    depto_join = iconv(depto_join, from = "UTF-8", to = "ASCII//TRANSLIT"),
+    depto_join = gsub("[[:punct:]]", "", depto_join)
+  )
+
+# --- PASO 4: Unir los Datos con el Mapa (Ahora funcionará perfectamente) ---
+mapa_con_datos <- mapa_colombia %>%
+  left_join(casos_por_depto, by = "depto_join")
+
+# --- PASO 5: Crear el MAPA INTERACTIVO con Leaflet (Sin cambios) ---
+paleta_colores <- colorNumeric(
+  palette = "YlOrRd",
+  domain = mapa_con_datos$casos,
+  na.color = "grey"
+)
+
+etiquetas_hover <- sprintf(
+  "<strong>%s</strong><br/>%s casos reportados",
+  mapa_con_datos$name,
+  format(mapa_con_datos$casos, big.mark = ".", decimal.mark = ",")
+) %>% lapply(htmltools::HTML)
+
+leaflet(mapa_con_datos) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~paleta_colores(casos),
+    weight = 1,
+    opacity = 1,
+    color = "white",
+    fillOpacity = 0.8,
+    highlightOptions = highlightOptions(
+      weight = 3,
+      color = "#666",
+      fillOpacity = 0.9,
+      bringToFront = TRUE
+    ),
+    label = etiquetas_hover,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"
+    )
+  ) %>%
+  addLegend(
+    pal = paleta_colores,
+    values = ~casos,
+    opacity = 0.7,
+    title = "Nº de Casos",
+    position = "bottomright"
+  )
+```
+
+::: {style="text-align: justify;"}
+El mapa muestra una concentración de casos de desnutrición en las regiones del norte y occidente del país. Los departamentos con el mayor número de casos reportados, identificados por los tonos más oscuros de rojo en el mapa, son `La Guajira` y `Bogotá, D.C`. Esto indica que la desnutrición no solo afecta a las áreas rurales tradicionalmente asociadas con la pobreza, sino que también es un problema significativo en los principales centros urbanos y en las regiones fronterizas.
+:::
+
+## Grupo Etarios
+
+### Caso por grupo étnico
+
+```{r}
+#| label: Grupo étnico
+#| echo: false
+#| message: false
+#| warning: false
+# --- Cargar Librerías ---
+# Asegúrate de tener estas librerías instaladas.
+library(dplyr)
+library(ggplot2)
+library(forcats) # Esencial para agrupar las categorías
+
+# --- Creación del Gráfico Mejorado ---
+Desnutricion %>%
+  filter(!is.na(nom_grupo)) %>%
+  # PASO CLAVE: Agrupamos los grupos étnicos menos frecuentes.
+  # Mantenemos los 7 más comunes y el resto los llamamos "Otro".
+  mutate(nom_grupo_agrupado = fct_lump_n(nom_grupo, n = 7, other_level = "Otro")) %>%
+  count(nom_grupo_agrupado) %>%
+  
+  # Creamos el gráfico con los datos ya agrupados
+  ggplot(aes(x = reorder(nom_grupo_agrupado, n), y = n)) +
+  geom_col(fill = "#0072B2", alpha = 0.8) + # Un color azul más profesional
+  
+  # MEJORA 1: Añadimos el número exacto de casos sobre cada barra
+  geom_text(aes(label = n), hjust = -0.2, size = 3, color = "black") +
+  
+  coord_flip() +
+  labs(
+    title = "Distribución de Casos por Grupo Étnico",
+    subtitle = "Solo se muestran los 7 grupos con mayor número de casos",
+    x = NULL, # Quitamos el título del eje x, es redundante
+    y = "Número de Casos"
+  ) +
+  
+  # MEJORA 2: Usamos un tema más limpio y ajustamos detalles
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.y = element_blank(), # Quitamos las líneas de la cuadrícula
+    panel.grid.minor.x = element_blank(),
+    plot.title = element_text(face = "bold")
+  ) +
+  
+  # MEJORA 3: Damos más espacio para que los números no se corten
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
+
+
+```
+
+::: {style="text-align: justify;"}
+El análisis por grupo étnico muestra una fuerte concentración de casos en la comunidad Wayuu, con 859 reportes.
+
+Esta cifra evidencia una brecha significativa, siendo más de cinco veces mayor que la del siguiente grupo indígena identificado, los Sikuani (162 casos). La categoría "Otro", con 615 casos, refleja la diversidad de otras etnias también afectadas por la desnutrición.
+:::
+
+### Pertinencia ética 
+
+```{r}
+#| label: analisis-etnia
+#| echo: false
+#| message: false
+#| warning: false
+
+# --- 1. Carga de Librerías ---
+library(readxl)
+library(dplyr)
+library(ggplot2)
+
+Desnutricion <- read_excel("~/GitHub/Proyectos_Bioestadistica/Datas/Datos_2020_113.xlsx")
+
+etnia_data <- Desnutricion %>%
+  # Recodificamos la variable PER_ETN para que sea legible
+  mutate(
+    etnia = factor(PER_ETN, 
+                   levels = c(1, 2, 3, 4, 5, 6), 
+                   labels = c("Indígena", "ROM (Gitano)", "Raizal", "Palenquero", "Negro/Afro", "Otro"))
+  ) %>%
+  # Contamos los casos por cada grupo étnico
+  count(etnia, sort = TRUE) %>%
+  # Quitamos los datos no disponibles (NA)
+  na.omit()
+
+# Paso 3.2: Calcular el límite del eje Y por separado
+# Calculamos el valor máximo de 'n' y lo multiplicamos por 1.15 para dar espacio.
+max_y_limit <- max(etnia_data$n) * 1.15
+
+# Paso 3.3: Crear el gráfico
+# Ahora usamos el dataframe 'etnia_data' que ya está limpio y calculado.
+ggplot(etnia_data, aes(x = reorder(etnia, n), y = n)) +
+  geom_col(fill = "#2c7fb8", alpha = 0.9, width = 0.7) +
+  geom_text(aes(label = n), hjust = -0.2, color = "black", size = 4) +
+  coord_flip() +
+  labs(
+    title = "Casos de Desnutrición Aguda por Pertenencia Étnica",
+    subtitle = "En menores de 5 años (2020)",
+    x = "Pertenencia Étnica",
+    y = "Número de Casos",
+    caption = "Fuente: Sistema de Vigilancia en Salud Pública (SIVIGILA)."
+  ) +
+  # Usamos la variable que creamos para definir el límite del eje.
+  scale_y_continuous(limits = c(0, max_y_limit)) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18),
+    panel.grid.major.y = element_blank(),
+    plot.caption = element_text(hjust = 0, face = "italic", color = "grey50")
+  )
+```
+
+
+### Casos confirmados vs. no confirmados
+
+```{r}
+#| label: estado-final-caso
+#| echo: false
+#| message: false
+#| warning: false
+
+#| label: estado-final-caso
+#| echo: true
+#| message: false
+#| warning: false
+
+library(readxl)
+library(dplyr)
+library(ggplot2)
+
+estado_final_data <- Desnutricion %>%
+  count(nom_est_f_caso, sort = TRUE) %>%
+  na.omit()
+
+# CORRECCIÓN: Calculamos el límite máximo para el eje Y por separado.
+max_y_limit <- max(estado_final_data$n) * 1.15
+
+# Ahora creamos el gráfico usando el nuevo dataframe.
+ggplot(estado_final_data, aes(x = reorder(nom_est_f_caso, n), y = n)) +
+  geom_col(fill = "#2c7fb8", alpha = 0.9, width = 0.7) +
+  # Añadimos las etiquetas con el número de casos
+  geom_text(aes(label = n), hjust = -0.2, color = "black", size = 4) +
+  # Volteamos los ejes para que los nombres se lean mejor
+  coord_flip() +
+  labs(
+    title = "Estado Final de los Casos de Desnutrición Aguda",
+    subtitle = "En menores de 5 años (2020)",
+    x = "Estado Final",
+    y = "Número de Casos",
+    caption = "Fuente: Sistema de Vigilancia en Salud Pública (SIVIGILA)."
+  ) +
+  # CORRECCIÓN: Usamos la variable que creamos para ajustar el límite del eje.
+  scale_y_continuous(limits = c(0, max_y_limit)) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    panel.grid.major.y = element_blank(), # Quitamos las líneas de la cuadrícula vertical
+    plot.caption = element_text(hjust = 0, face = "italic", color = "grey50")
+  )
+```
+
+### Hospitales con más casos
+
+```{r}
+#| label: Hospitales
+#| echo: false
+#| message: false
+#| warning: false
+library(dplyr)
+library(ggplot2)
+library(stringr)
+
+Desnutricion %>%
+  count(Nom_upgd) %>%
+  top_n(20, n) %>%
+  mutate(Nom_upgd_corto = str_wrap(Nom_upgd, width = 45)) %>%
+  ggplot(aes(x = reorder(Nom_upgd_corto, n), y = n)) +
+  geom_col(fill = "#0d47a1", alpha = 0.9) +
+  geom_text(aes(label = n), hjust = -0.2, color = "black", 
+            fontface = "bold", size = 3.5) +
+  coord_flip() +
+  labs(
+    title = "Top 20 Unidades Notificadoras (UPGD) con Más Casos Reportados",
+    x = NULL, # El eje es autoexplicativo, no necesita título.
+    y = "Número de Casos"
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  theme_minimal(base_size = 10) +
+  theme(
+    plot.title = element_text(face = "bold", size = 10),
+    # MEJORA 3: Reducimos el tamaño de la letra de los nombres de los hospitales.
+    axis.text.y = element_text(size = 5)
+  )
+```
+::: {style="text-align: justify;"}
+El Hospital San José de Maicao (La Guajira) y la USS Meissen (Bogotá) son las dos instituciones con el mayor número de reportes, con 119 y 114 casos respectivamente.
+
+Este patrón indica que estas dos entidades actúan como los principales centros de referencia para la desnutrición en sus respectivas regiones, reflejando la alta incidencia del problema tanto en La Guajira como en la capital del país.
+:::
+
+### Caso de desnutrición semana epidemilogica
+
+```{r}
+#| label: Serie de Tiempo
+#| echo: false
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+library(plotly)
+
+casos_por_semana <- Desnutricion %>%
+
+  mutate(SEMANA = as.numeric(as.character(SEMANA))) %>%
+  filter(!is.na(SEMANA)) %>%
+
+  group_by(SEMANA) %>%
+  summarise(
+    total_casos = n(),
+    # Creamos el texto para el tooltip: listamos los 3 deptos con más casos esa semana.
+    top_deptos = paste(
+      names(sort(table(Departamento_ocurrencia), decreasing = TRUE)[1:3]),
+      collapse = "<br>- " # Usamos HTML para un salto de línea en el tooltip.
+    )
+  ) %>%
+  ungroup()
+
+p <- ggplot(casos_por_semana, aes(x = SEMANA, y = total_casos, 
+                                  text = paste("Semana:", SEMANA, 
+                                               "<br>Total Casos:", format(total_casos, big.mark = "."),
+                                               "<br><b>Top Departamentos:</b>",
+                                               "<br>-", top_deptos))) +
+  geom_line(color = "#0077b6", size = 1) +
+  geom_point(color = "#0077b6", size = 2, alpha = 0.8) +
+  scale_x_continuous(breaks = seq(0, 52, by = 4)) +
+  labs(
+    title = "Evolución de Casos de Desnutrición por Semana Epidemiológica",
+    subtitle = "Pasa el cursor sobre los puntos para ver el detalle por departamento",
+    x = "Semana Epidemiológica",
+    y = "Número de Casos Reportados",
+    caption = "Fuente: Datos de Desnutrición."
+  ) +
+   scale_y_continuous(expand = expansion(mult = c(0, 0.3))) +
+  
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title = element_text(face = "bold", size = 15),
+    panel.grid.minor.x = element_blank()
+  )
+
+p_interactive <- ggplotly(p, tooltip = "text")
+
+p_interactive %>%
+  config(
+    # Dejamos los botones más útiles: zoom, pan, reset y descargar.
+    modeBarButtonsToRemove = c('select2d', 'lasso2d', 'toggleSpikelines', 
+                               'hoverClosestCartesian', 'hoverCompareCartesian', 
+                               'sendDataToCloud', 'autoScale2d'),
+    displaylogo = FALSE,
+    displayModeBar = TRUE # <-- Clave: hace que la barra sea siempre visible.
+  )
+```

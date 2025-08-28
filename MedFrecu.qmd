@@ -1,0 +1,363 @@
+---
+title: "Medidas de Frecuencias"
+format: html
+---
+
+## Cálculo de la Razón Hombre:Mujer
+
+::: {style="text-align: justify;"}
+La razón es una medida de frecuencia que compara dos cantidades que no se contienen entre sí. En este caso, comparamos el número de casos de desnutrición en hombres con el número de casos en mujeres.
+
+-   **Paso 1: Identificar los datos necesarios**
+
+Primero, obtenemos el conteo de casos para cada grupo de la base de datos.
+
+```{r}
+#| label: calculo-razon
+#| echo: false
+#| message: false
+#| warning: false
+# --- 1. Carga de Librerías ---
+library(readxl)
+library(dplyr)
+library(knitr) # Librería para crear tablas profesionales
+
+# --- 2. Carga de Datos ---
+# Asegúrate de que la ruta a tu archivo sea correcta.
+tryCatch({
+  Desnutricion <- read_excel("~/GitHub/Proyectos_Bioestadistica/Datas/Datos_2020_113.xlsx")
+}, error = function(e) {
+  stop("Error al cargar el archivo. Verifica tu ruta.")
+})
+
+# --- 3. Cálculo de la Razón ---
+# Primero, calculamos los datos necesarios.
+casos_sexo <- Desnutricion %>%
+  filter(SEXO %in% c("M", "F")) %>%
+  count(SEXO)
+
+casos_hombres <- casos_sexo %>% filter(SEXO == "M") %>% pull(n)
+casos_mujeres <- casos_sexo %>% filter(SEXO == "F") %>% pull(n)
+razon_hm <- casos_hombres / casos_mujeres
+
+# --- 4. Creación de la Tabla Profesional ---
+# Preparamos los datos para la tabla, haciéndolos más legibles.
+tabla_razon <- casos_sexo %>%
+  mutate(SEXO = ifelse(SEXO == "M", "Hombres", "Mujeres")) %>%
+  rename(Sexo = SEXO, `Número de Casos` = n)
+
+# Usamos kable() para generar una tabla con formato de artículo.
+kable(
+  tabla_razon,
+  caption = paste0(
+    "Tabla 1: Frecuencia de casos de desnutrición por sexo. ",
+    "Razón Hombres:Mujeres = ", round(razon_hm, 2),
+    ". Fuente: SIVIGILA, 2020."
+  ),
+  align = "lc" # Alineamos las columnas (izquierda, centro)
+)
+```
+
+```{r}
+#| label: grafica-razon
+#| echo: false
+#| message: false
+#| warning: false
+
+# --- 1. Carga de Librerías ---
+library(readxl)
+library(dplyr)
+library(ggplot2)
+
+# --- 2. Carga de Datos ---
+# Asegúrate de que la ruta a tu archivo sea correcta.
+tryCatch({
+  Desnutricion <- read_excel("~/GitHub/Proyectos_Bioestadistica/Datas/Datos_2020_113.xlsx")
+}, error = function(e) {
+  stop("Error al cargar el archivo. Verifica tu ruta.")
+})
+
+# --- 3. Preparación de Datos para el Gráfico ---
+# Primero, calculamos los datos y los guardamos en un nuevo dataframe.
+razon_data <- Desnutricion %>%
+  filter(SEXO %in% c("M", "F")) %>%
+  count(SEXO) %>%
+  mutate(
+    Sexo_Etiqueta = ifelse(SEXO == "M", "Hombres", "Mujeres")
+  )
+
+# Calculamos la razón para incluirla en el pie de página.
+casos_hombres <- razon_data %>% filter(SEXO == "M") %>% pull(n)
+casos_mujeres <- razon_data %>% filter(SEXO == "F") %>% pull(n)
+razon_hm <- casos_hombres / casos_mujeres
+
+# --- 4. Creación del Gráfico ---
+ggplot(razon_data, aes(x = Sexo_Etiqueta, y = n, fill = Sexo_Etiqueta)) +
+  geom_col(show.legend = FALSE, width = 0.6) +
+  geom_text(aes(label = n), vjust = -0.5, size = 5, color = "black") +
+  scale_fill_manual(values = c("Mujeres" = "#0074B7", "Hombres" = "#60A3D9")) +
+  labs(
+    title = "Comparación de Casos de Desnutrición por Sexo",
+    subtitle = "Año 2020",
+    x = "Sexo",
+    y = "Número de Casos",
+    caption = paste0("Razón Hombres:Mujeres = ", round(razon_hm, 2), ". Fuente: SIVIGILA, 2020.")
+  ) +
+  scale_y_continuous(limits = c(0, max(razon_data$n) * 1.15)) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18),
+    panel.grid.major.x = element_blank(),
+    plot.caption = element_text(hjust = 0, face = "italic", color = "grey50")
+  )
+
+
+```
+-   **Paso 2: Definir la fórmula matemática**
+
+La fórmula para calcular la razón es un simple cociente entre los dos grupos que queremos comparar.
+
+$$\text{Razón} = \frac{\text{Número de casos en Hombres}}{\text{Número de casos en Mujeres}}$$
+
+-    **Paso 3: Realizar el cálculo**
+
+Sustituimos los valores de los casos en la fórmula.
+
+$$\text{Razón} = \frac{5,793}{4,951} \approx 1.17$$
+
+Esto significa que por cada caso de desnutrición en una mujer, hay 1.17 casos en hombres, lo que confirma que la condición fue más frecuente en el sexo masculino en esta población.
+:::
+
+## Tasa 
+### Cálculo de tasa de insidencia
+
+#### Cálculo de la Tasa de Incidencia (Menores de 5 años)
+
+::: {style="text-align: justify;"}
+La tasa de incidencia mide el riesgo de que ocurra un evento (en este caso, desnutrición aguda) en una población específica durante un período determinado. Es la medida más importante para entender la velocidad con la que aparecen nuevos casos.
+
+- **Paso 1: Identificar los datos necesarios**
+
+Para este cálculo, necesitamos un `numerador` **(los casos)** y un `denominador` **(la población en riesgo)**.
+
+-   Número de casos en menores de 5 años: 10.744
+    Fuentes SIVIGILA[@ins_desnutricion_2020].
+-   Población total de menores de 5 años en Colombia: 3.853.223
+    Fuente: DANE, Proyecciones de la Población 2020[@dane_proyecciones_2020].
+    
+- **Paso 2: Definir la fórmula matemática**
+
+La fórmula para la tasa de incidencia es:
+
+$$\text{Tasa de Incidencia} = \frac{\text{Número de Casos Nuevos}}{\text{Población en Riesgo}} \times \text{Factor Multiplicador}$$
+Para este análisis, usaremos un factor multiplicador de 1,000 para interpretar el resultado como "casos por cada 1,000 niños".
+
+- **Paso 3: Realizar el cálculo**
+
+Sustituimos los valores en la fórmula:
+
+$$\text{Tasa de Incidencia} = \frac{10,744}{3,853,223} \times 1,000 \approx 2.79$$
+
+- **Paso 4: Interpretación del resultado**
+
+El resultado final es `2.79`.
+
+Esto significa que, durante el año 2020, en Colombia se presentaron 2.79 casos nuevos de desnutrición aguda por cada 1,000 niños menores de 5 años.
+:::
+
+```{r}
+#| label: grafica-tasa-incidencia
+#| echo: false
+#| message: false
+#| warning: false
+
+# --- 1. Carga de Librerías ---
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(scales)
+
+# --- 2. Carga de Datos ---
+tryCatch({
+  Desnutricion <- read_excel("~/GitHub/Proyectos_Bioestadistica/Datas/Datos_2020_113.xlsx")
+}, error = function(e) {
+  stop("Error al cargar el archivo. Verifica tu ruta.")
+})
+
+# --- 3. Cálculo de Tasas de Incidencia por Grupo Étnico ---
+
+# Paso 3.1: Estandarizar la edad y recodificar etnia
+datos_limpios <- Desnutricion %>%
+  mutate(
+    edad = as.numeric(EDAD),
+    edad_en_meses = case_when(
+      UNI_MED == 1 ~ edad * 12,
+      UNI_MED == 2 ~ edad,
+      UNI_MED == 3 ~ edad / 30.4,
+      TRUE ~ NA_real_
+    ),
+    etnia = factor(PER_ETN, 
+                   levels = c(1, 5, 6), 
+                   labels = c("Indígena", "Negro/Afro", "Otro"))
+  ) %>%
+  filter(edad_en_meses < 60, !is.na(etnia))
+
+# Paso 3.2: Contar los casos (numeradores)
+casos_por_etnia <- datos_limpios %>%
+  count(etnia)
+
+# Paso 3.3: Definir las poblaciones (denominadores)
+# Fuente: Estimaciones basadas en proyecciones DANE 2020 para menores de 5 años.
+poblaciones <- data.frame(
+  etnia = c("Indígena", "Negro/Afro", "Otro"),
+  poblacion = c(169542, 262019, 3421662) # Estimados
+)
+
+# Paso 3.4: Unir casos y poblaciones y calcular la tasa
+tasas_data <- left_join(casos_por_etnia, poblaciones, by = "etnia") %>%
+  mutate(
+    tasa = (n / poblacion) * 1000 # Tasa por 1,000 niños
+  )
+
+# --- 4. Creación de la Gráfica de Barras Comparativa ---
+ggplot(tasas_data, aes(x = reorder(etnia, tasa), y = tasa, fill = etnia)) +
+  geom_col(show.legend = FALSE, alpha = 0.9) +
+  geom_text(aes(label = round(tasa, 1)), vjust = -0.5, size = 4, color = "black") +
+  scale_fill_manual(values = c("Otro" = "#BFD7ED", "Negro/Afro" = "#60A3D9", "Indígena" = "#003B73")) +
+  labs(
+    title = "Tasa de Incidencia de Desnutrición Aguda por Etnia",
+    subtitle = "En menores de 5 años (Colombia, 2020)",
+    x = "Pertenencia Étnica",
+    y = "Casos por cada 1,000 niños",
+    caption = "Fuentes: SIVIGILA (casos) y DANE (población)."
+  ) +
+  scale_y_continuous(limits = c(0, max(tasas_data$tasa) * 1.15)) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18),
+    panel.grid.major.x = element_blank(),
+    plot.caption = element_text(hjust = 0, face = "italic", color = "grey50")
+  )
+```
+
+
+## Proporción
+### Cálculo de la Proporción de Casos por Sexo
+
+::: {style="text-align: justify;"}
+La proporción es una medida de frecuencia que muestra qué parte del total de casos corresponde a una categoría específica. Se expresa comúnmente como un porcentaje.
+
+- **Paso 1: Identificar los datos necesarios**
+
+Primero, obtenemos el conteo de casos para cada sexo y el total de casos de la base de datos.
+
+- Número de casos en Hombres: 5,793
+
+- Número de casos en Mujeres: 4,951
+
+Total de Casos: 5,793 + 4,951 = 10,744
+
+Fuentes SIVIGILA[@ins_desnutricion_2020].
+
+- **Paso 2: Definir la fórmula matemática**
+
+La fórmula para calcular la proporción de una categoría es:
+
+$$\text{Proporción} = \frac{\text{Número de casos en la categoría}}{\text{Número Total de Casos}} \times 100\%$$
+- **Paso 3: Realizar el cálculo para cada sexo**
+
+Sustituimos los valores en la fórmula para cada categoría.
+
+-   Proporción en Hombres:
+
+$$\text{Proporción}_{\text{Hombres}} = \frac{5,793}{10,744} \times 100\% \approx 53.9\%$$
+
+-   Proporción en Mujeres:
+$$\text{Proporción}_{\text{Mujeres}} = \frac{4,951}{10,744} \times 100\% \approx 46.1\%$$
+
+- **Paso 4: Interpretación del resultado**
+
+Los resultados finales son 53.9% para hombres y 46.1% para mujeres.
+
+Esto significa que, del total de casos de desnutrición reportados en 2020, el 53.9% correspondieron a hombres y el 46.1% a mujeres, mostrando una mayor proporción de casos en el sexo masculino.
+:::
+
+```{r}
+#| label: calculo-proporcion
+#| echo: false
+#| message: false
+#| warning: false
+
+# --- 1. Carga de Librerías ---
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(gt) # Para tablas de alta calidad
+
+# --- 2. Carga de Datos ---
+# Asegúrate de que la ruta a tu archivo sea correcta.
+tryCatch({
+  Desnutricion <- read_excel("~/GitHub/Proyectos_Bioestadistica/Datas/Datos_2020_113.xlsx")
+}, error = function(e) {
+  stop("Error al cargar el archivo. Verifica tu ruta.")
+})
+
+# --- 3. Cálculo y Tabla de Proporciones ---
+# Preparamos los datos, calculamos las frecuencias y los porcentajes.
+proporcion_data <- Desnutricion %>%
+  filter(SEXO %in% c("M", "F")) %>%
+  count(SEXO) %>%
+  mutate(
+    Proporcion = n / sum(n),
+    Sexo = ifelse(SEXO == "M", "Hombres", "Mujeres")
+  )
+
+# Creamos la tabla profesional con 'gt'
+proporcion_data %>%
+  select(Sexo, n, Proporcion) %>%
+  gt() %>%
+  fmt_percent(columns = Proporcion, decimals = 1) %>%
+  cols_label(
+    n = "Número de Casos",
+    Proporcion = "Porcentaje del Total"
+  ) %>%
+  tab_header(
+    title = "Tabla 2: Proporción de Casos de Desnutrición por Sexo"
+  ) %>%
+  tab_source_note(
+    source_note = "Fuente: SIVIGILA, 2020."
+  )
+
+# --- 4. Gráfico de Proporciones (Gráfico de Anillo) ---
+ggplot(proporcion_data, aes(x = 2, y = Proporcion, fill = Sexo)) +
+  geom_col(color = "white") +
+  # Convertimos el gráfico de barras en un gráfico polar (torta)
+  coord_polar(theta = "y", start = 0) +
+  # Añadimos las etiquetas de porcentaje
+  geom_text(
+    aes(label = percent(Proporcion, accuracy = 0.1)),
+    position = position_stack(vjust = 0.5),
+    color = "white",
+    size = 6,
+    fontface = "bold"
+  ) +
+  # Creamos el agujero en el centro para hacerlo un anillo
+  xlim(0.5, 2.5) +
+  scale_fill_manual(values = c("Mujeres" = "#0074B7", "Hombres" = "#60A3D9")) +
+  labs(
+    title = "Proporción de Casos de Desnutrición por Sexo",
+    subtitle = "Año 2020",
+    caption = "Fuente: SIVIGILA, 2020."
+  ) +
+  theme_void(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, color = "grey50"),
+    plot.caption = element_text(hjust = 0.5, face = "italic", color = "grey50"),
+    legend.position = "bottom"
+  )
+
+
+
+```

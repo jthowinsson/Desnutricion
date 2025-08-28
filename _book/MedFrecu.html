@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Msc Jesús D. Zamora Th. (info.thowinsson@gmail.com)">
-<meta name="dcterms.date" content="2025-08-24">
 
-<title>Desnutricion</title>
+<title>3&nbsp; Medidas de Frecuencias – Desnutricion</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,7 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -32,7 +49,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./summary.html" rel="next">
+<link href="./Eda.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -86,6 +104,35 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -98,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./MedFrecu.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Medidas de Frecuencias</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -125,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -143,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./MedFrecu.html" class="sidebar-item-text sidebar-link">
+  <a href="./MedFrecu.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Medidas de Frecuencias</span></span></a>
   </div>
 </li>
@@ -169,7 +216,15 @@ document.addEventListener('DOMContentLoaded', function () {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#cálculo-de-la-razón-hombremujer" id="toc-cálculo-de-la-razón-hombremujer" class="nav-link active" data-scroll-target="#cálculo-de-la-razón-hombremujer"><span class="header-section-number">3.1</span> Cálculo de la Razón Hombre:Mujer</a></li>
+  <li><a href="#tasa" id="toc-tasa" class="nav-link" data-scroll-target="#tasa"><span class="header-section-number">3.2</span> Tasa</a>
+  <ul class="collapse">
+  <li><a href="#cálculo-de-tasa-de-insidencia" id="toc-cálculo-de-tasa-de-insidencia" class="nav-link" data-scroll-target="#cálculo-de-tasa-de-insidencia"><span class="header-section-number">3.2.1</span> Cálculo de tasa de insidencia</a></li>
+  </ul></li>
+  <li><a href="#proporción" id="toc-proporción" class="nav-link" data-scroll-target="#proporción"><span class="header-section-number">3.3</span> Proporción</a>
+  <ul class="collapse">
+  <li><a href="#cálculo-de-la-proporción-de-casos-por-sexo" id="toc-cálculo-de-la-proporción-de-casos-por-sexo" class="nav-link" data-scroll-target="#cálculo-de-la-proporción-de-casos-por-sexo"><span class="header-section-number">3.3.1</span> Cálculo de la Proporción de Casos por Sexo</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -178,26 +233,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Desnutricion</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Medidas de Frecuencias</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Msc Jesús D. Zamora Th. (info.thowinsson@gmail.com) </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 24, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -207,18 +250,637 @@ document.addEventListener('DOMContentLoaded', function () {
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<div class="{#toc-imagen-container">
-<div class="quarto-figure quarto-figure-center">
+<section id="cálculo-de-la-razón-hombremujer" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="cálculo-de-la-razón-hombremujer"><span class="header-section-number">3.1</span> Cálculo de la Razón Hombre:Mujer</h2>
+<div style="text-align: justify;">
+<p>La razón es una medida de frecuencia que compara dos cantidades que no se contienen entre sí. En este caso, comparamos el número de casos de desnutrición en hombres con el número de casos en mujeres.</p>
+<ul>
+<li><strong>Paso 1: Identificar los datos necesarios</strong></li>
+</ul>
+<p>Primero, obtenemos el conteo de casos para cada grupo de la base de datos.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Tabla 1: Frecuencia de casos de desnutrición por sexo. Razón Hombres:Mujeres = 1.17. Fuente: SIVIGILA, 2020.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Sexo</th>
+<th style="text-align: center;">Número de Casos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Mujeres</td>
+<td style="text-align: center;">4951</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hombres</td>
+<td style="text-align: center;">5793</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
 <figure class="figure">
-<p><img src="images/desnutricioninfantil.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption>Imagen tomada de Runrun.es</figcaption>
+<p><img src="MedFrecu_files/figure-html/grafica-razon-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
+</div>
+<ul>
+<li><strong>Paso 2: Definir la fórmula matemática</strong></li>
+</ul>
+<p>La fórmula para calcular la razón es un simple cociente entre los dos grupos que queremos comparar.</p>
+<p><span class="math display">\[\text{Razón} = \frac{\text{Número de casos en Hombres}}{\text{Número de casos en Mujeres}}\]</span></p>
+<ul>
+<li><strong>Paso 3: Realizar el cálculo</strong></li>
+</ul>
+<p>Sustituimos los valores de los casos en la fórmula.</p>
+<p><span class="math display">\[\text{Razón} = \frac{5,793}{4,951} \approx 1.17\]</span></p>
+<p>Esto significa que por cada caso de desnutrición en una mujer, hay 1.17 casos en hombres, lo que confirma que la condición fue más frecuente en el sexo masculino en esta población.</p>
+</div>
+</section>
+<section id="tasa" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="tasa"><span class="header-section-number">3.2</span> Tasa</h2>
+<section id="cálculo-de-tasa-de-insidencia" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="cálculo-de-tasa-de-insidencia"><span class="header-section-number">3.2.1</span> Cálculo de tasa de insidencia</h3>
+<section id="cálculo-de-la-tasa-de-incidencia-menores-de-5-años" class="level4" data-number="3.2.1.1">
+<h4 data-number="3.2.1.1" class="anchored" data-anchor-id="cálculo-de-la-tasa-de-incidencia-menores-de-5-años"><span class="header-section-number">3.2.1.1</span> Cálculo de la Tasa de Incidencia (Menores de 5 años)</h4>
+<div style="text-align: justify;">
+<p>La tasa de incidencia mide el riesgo de que ocurra un evento (en este caso, desnutrición aguda) en una población específica durante un período determinado. Es la medida más importante para entender la velocidad con la que aparecen nuevos casos.</p>
+<ul>
+<li><strong>Paso 1: Identificar los datos necesarios</strong></li>
+</ul>
+<p>Para este cálculo, necesitamos un <code>numerador</code> <strong>(los casos)</strong> y un <code>denominador</code> <strong>(la población en riesgo)</strong>.</p>
+<ul>
+<li><p>Número de casos en menores de 5 años: 10.744 Fuentes SIVIGILA<span class="citation" data-cites="ins_desnutricion_2020">(<a href="references.html#ref-ins_desnutricion_2020" role="doc-biblioref">1</a>)</span>.</p></li>
+<li><p>Población total de menores de 5 años en Colombia: 3.853.223 Fuente: DANE, Proyecciones de la Población 2020<span class="citation" data-cites="dane_proyecciones_2020">(<a href="references.html#ref-dane_proyecciones_2020" role="doc-biblioref">2</a>)</span>.</p></li>
+<li><p><strong>Paso 2: Definir la fórmula matemática</strong></p></li>
+</ul>
+<p>La fórmula para la tasa de incidencia es:</p>
+<p><span class="math display">\[\text{Tasa de Incidencia} = \frac{\text{Número de Casos Nuevos}}{\text{Población en Riesgo}} \times \text{Factor Multiplicador}\]</span> Para este análisis, usaremos un factor multiplicador de 1,000 para interpretar el resultado como “casos por cada 1,000 niños”.</p>
+<ul>
+<li><strong>Paso 3: Realizar el cálculo</strong></li>
+</ul>
+<p>Sustituimos los valores en la fórmula:</p>
+<p><span class="math display">\[\text{Tasa de Incidencia} = \frac{10,744}{3,853,223} \times 1,000 \approx 2.79\]</span></p>
+<ul>
+<li><strong>Paso 4: Interpretación del resultado</strong></li>
+</ul>
+<p>El resultado final es <code>2.79</code>.</p>
+<p>Esto significa que, durante el año 2020, en Colombia se presentaron 2.79 casos nuevos de desnutrición aguda por cada 1,000 niños menores de 5 años.</p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MedFrecu_files/figure-html/grafica-tasa-incidencia-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="proporción" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="proporción"><span class="header-section-number">3.3</span> Proporción</h2>
+<section id="cálculo-de-la-proporción-de-casos-por-sexo" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="cálculo-de-la-proporción-de-casos-por-sexo"><span class="header-section-number">3.3.1</span> Cálculo de la Proporción de Casos por Sexo</h3>
+<div style="text-align: justify;">
+<p>La proporción es una medida de frecuencia que muestra qué parte del total de casos corresponde a una categoría específica. Se expresa comúnmente como un porcentaje.</p>
+<ul>
+<li><strong>Paso 1: Identificar los datos necesarios</strong></li>
+</ul>
+<p>Primero, obtenemos el conteo de casos para cada sexo y el total de casos de la base de datos.</p>
+<ul>
+<li><p>Número de casos en Hombres: 5,793</p></li>
+<li><p>Número de casos en Mujeres: 4,951</p></li>
+</ul>
+<p>Total de Casos: 5,793 + 4,951 = 10,744</p>
+<p>Fuentes SIVIGILA<span class="citation" data-cites="ins_desnutricion_2020">(<a href="references.html#ref-ins_desnutricion_2020" role="doc-biblioref">1</a>)</span>.</p>
+<ul>
+<li><strong>Paso 2: Definir la fórmula matemática</strong></li>
+</ul>
+<p>La fórmula para calcular la proporción de una categoría es:</p>
+<p><span class="math display">\[\text{Proporción} = \frac{\text{Número de casos en la categoría}}{\text{Número Total de Casos}} \times 100\%\]</span> - <strong>Paso 3: Realizar el cálculo para cada sexo</strong></p>
+<p>Sustituimos los valores en la fórmula para cada categoría.</p>
+<ul>
+<li>Proporción en Hombres:</li>
+</ul>
+<p><span class="math display">\[\text{Proporción}_{\text{Hombres}} = \frac{5,793}{10,744} \times 100\% \approx 53.9\%\]</span></p>
+<ul>
+<li><p>Proporción en Mujeres: <span class="math display">\[\text{Proporción}_{\text{Mujeres}} = \frac{4,951}{10,744} \times 100\% \approx 46.1\%\]</span></p></li>
+<li><p><strong>Paso 4: Interpretación del resultado</strong></p></li>
+</ul>
+<p>Los resultados finales son 53.9% para hombres y 46.1% para mujeres.</p>
+<p>Esto significa que, del total de casos de desnutrición reportados en 2020, el 53.9% correspondieron a hombres y el 46.1% a mujeres, mostrando una mayor proporción de casos en el sexo masculino.</p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="kcnofrzkmy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kcnofrzkmy table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#kcnofrzkmy thead, #kcnofrzkmy tbody, #kcnofrzkmy tfoot, #kcnofrzkmy tr, #kcnofrzkmy td, #kcnofrzkmy th {
+  border-style: none;
+}
+
+#kcnofrzkmy p {
+  margin: 0;
+  padding: 0;
+}
+
+#kcnofrzkmy .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#kcnofrzkmy .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kcnofrzkmy .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kcnofrzkmy .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kcnofrzkmy .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kcnofrzkmy .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kcnofrzkmy .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kcnofrzkmy .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kcnofrzkmy .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#kcnofrzkmy .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#kcnofrzkmy .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kcnofrzkmy .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kcnofrzkmy .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kcnofrzkmy .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kcnofrzkmy .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kcnofrzkmy .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#kcnofrzkmy .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kcnofrzkmy .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#kcnofrzkmy .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kcnofrzkmy .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kcnofrzkmy .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kcnofrzkmy .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kcnofrzkmy .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kcnofrzkmy .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kcnofrzkmy .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kcnofrzkmy .gt_left {
+  text-align: left;
+}
+
+#kcnofrzkmy .gt_center {
+  text-align: center;
+}
+
+#kcnofrzkmy .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kcnofrzkmy .gt_font_normal {
+  font-weight: normal;
+}
+
+#kcnofrzkmy .gt_font_bold {
+  font-weight: bold;
+}
+
+#kcnofrzkmy .gt_font_italic {
+  font-style: italic;
+}
+
+#kcnofrzkmy .gt_super {
+  font-size: 65%;
+}
+
+#kcnofrzkmy .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#kcnofrzkmy .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#kcnofrzkmy .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#kcnofrzkmy .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#kcnofrzkmy .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#kcnofrzkmy .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#kcnofrzkmy .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#kcnofrzkmy .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#kcnofrzkmy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border">Tabla 2: Proporción de Casos de Desnutrición por Sexo</th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Sexo" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Sexo</th>
+<th id="n" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Número de Casos</th>
+<th id="Proporcion" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Porcentaje del Total</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Sexo">Mujeres</td>
+<td class="gt_row gt_right" headers="n">4951</td>
+<td class="gt_row gt_right" headers="Proporcion">46.1%</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Sexo">Hombres</td>
+<td class="gt_row gt_right" headers="n">5793</td>
+<td class="gt_row gt_right" headers="Proporcion">53.9%</td>
+</tr>
+</tbody><tfoot class="gt_sourcenotes">
+<tr class="odd">
+<td colspan="3" class="gt_sourcenote">Fuente: SIVIGILA, 2020.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MedFrecu_files/figure-html/calculo-proporcion-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body" role="list" style="display: none">
+<div id="ref-ins_desnutricion_2020" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Instituto Nacional de Salud. Informe del evento desnutrición aguda, moderada y severa en menores de cinco años, colombia, 2020 [Internet]. Instituto Nacional de Salud, Colombia; 2020. Available from: <a href="https://www.ins.gov.co/buscador-eventos/Informes%20de%20evento/DESNUTRICI%C3%93N%20AGUDA%20PE%20XIII%202020.pdf">https://www.ins.gov.co/buscador-eventos/Informes%20de%20evento/DESNUTRICI%C3%93N%20AGUDA%20PE%20XIII%202020.pdf</a></div>
+</div>
+<div id="ref-dane_proyecciones_2020" class="csl-entry" role="listitem">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Departamento Administrativo Nacional de Estadística (DANE). Proyecciones y retroproyecciones de población nacional, departamental y municipal por sexo, grupos quinquenales de edad y edades simples de 0 a 26 años. Periodo 1985-2035 [Internet]. 2020. Available from: <a href="https://www.dane.gov.co/index.php/estadisticas-por-tema/demografia-y-poblacion/proyecciones-de-poblacion">https://www.dane.gov.co/index.php/estadisticas-por-tema/demografia-y-poblacion/proyecciones-de-poblacion</a></div>
+</div>
+</div>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -704,10 +1366,13 @@ toggle.addEventListener('click', () => {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./Eda.html" class="pagination-link" aria-label="Análisis Exploratorio de Datos">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Análisis Exploratorio de Datos</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link" aria-label="Introducción">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./summary.html" class="pagination-link" aria-label="Summary">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Desnutricion",
     "section": "",
-    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.\n\n1 + 1\n\n[1] 2",
+    "text": "Preface\n\n\n\n\nImagen tomada de Runrun.es",
     "crumbs": [
       "Preface"
     ]
@@ -12,21 +12,111 @@
   {
     "objectID": "intro.html",
     "href": "intro.html",
-    "title": "1  Introduction",
+    "title": "1  Introducción",
     "section": "",
-    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "text": "Este es el pie de foto de mi imagen\n\n\n\nLa desnutrición infantil es una condición que surge por el consumo insuficiente de alimentos, tanto en cantidad como en calidad, y por la presencia recurrente de enfermedades infecciosas y factores sociales adversos que afectan el estado nutricional de la niñez. Este problema impacta principalmente a niñas y niños en sus primeros años de vida y genera graves consecuencias en su desarrollo físico y cognitivo, dependiendo de la severidad. En casos extremos, puede llevar a la muerte si no se recibe atención adecuada y oportuna(1,2).\nDe acuerdo con el Fondo de las Naciones Unidas para la Infancia (UNICEF), un niño que sufre desnutrición aguda grave tiene hasta nueve veces más probabilidad de morir en comparación con uno que tiene un estado nutricional normal. Esta forma de desnutrición altera todos los procesos vitales y requiere intervención médica urgente(2,3).\nPor ello, es fundamental que padres, madres y cuidadores reconozcan las principales causas y tipos de la desnutrición infantil. Estos incluyen la desnutrición aguda (peso bajo para la talla), desnutrición crónica (retraso del crecimiento) y la deficiencia de micronutrientes como vitaminas y minerales, cada una con señales y consecuencias específicas. Identificar tempranamente los signos de alerta —como pérdida rápida de peso, retraso en el crecimiento o alteraciones clínicas evidentes— permite consultar oportunamente al profesional de salud y evitar complicaciones graves(1–4).\n\n\n\n\n\n1. Organización Mundial de la Salud. Malnutrición [Internet]. 2024. Available from: https://www.who.int/es/news-room/fact-sheets/detail/malnutrition\n\n\n2. UNICEF. Desnutrición infantil [Internet]. 2019. Available from: https://www.unicef.es/causas/desnutricion-infantil\n\n\n3. Instituto Nacional de Salud. Desnutrición aguda en menores de 5 años [Internet]. Instituto Nacional de Salud, Colombia; 2024. Available from: https://www.ins.gov.co/buscador-eventos/Lineamientos/PRO_DNT%20Aguda%20en%20menores%20de%205%20a%C3%B1os%202024.pdf\n\n\n4. Ministerio de Salud y Protección Social. ABC de la atención integral a la desnutrición aguda [Internet]. Ministerio de Salud y Protección Social, Colombia; 2016. Available from: https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/PP/SNA/abc-desnutricion-aguda.pdf",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
+    ]
+  },
+  {
+    "objectID": "Eda.html",
+    "href": "Eda.html",
+    "title": "2  Análisis Exploratorio de Datos",
+    "section": "",
+    "text": "2.1 Descipción de Datos\nFundamentos del Análisis: Una Mirada Inicial a los Datos",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis Exploratorio de Datos</span>"
+    ]
+  },
+  {
+    "objectID": "Eda.html#descipción-de-datos",
+    "href": "Eda.html#descipción-de-datos",
+    "title": "2  Análisis Exploratorio de Datos",
+    "section": "",
+    "text": "2.1.1 Dimensiones, tipos y resumen\n\n\n\n\n\n\n\n\nDimensiones del dataset\n\n\nRegistros\nVariables\n\n\n\n\n10744\n74\n\n\n\n\n\n\n\n\n\n\n\nVariables por tipo\n\n\nTipo de variable\nConteo\n% sobre total\n\n\n\n\nNuméricas\n0\n0.0\n\n\nCategóricas\n66\n89.2\n\n\nLógicas\n8\n10.8\n\n\nFecha / Fecha-hora\n0\n0.0\n\n\n\nNota: las variables categóricas incluyen factor y character; las fecha incluyen Date y POSIXct.\n\n\n\n\n\n\n\n\n\nLa tabla anterior nos ofrece una radiografía inicial de la estructura de nuestros datos, revelando dos puntos clave: dimensiones del conjunto de datos y predominio de variables categórica, esta primera vista nos confirma que, si bien los datos son ricos en descriptores, requieren un tratamiento cuidadoso para asegurar que cada variable sea interpretada correctamente antes de proceder con análisis más complejos.\n\n\n\n2.1.2 Diccionario de variables\n\n\n\n\n\n\n\n\nVariables de Estudio\n\n\nSeleccionadas para el análisis de desnutrición aguda\n\n\nVariable\nSignificado\n\n\n\n\nFEC_NOT\nFecha de Notificación\n\n\nSEMANA\nSemana epidemiológica según calendario vigente\n\n\nEDAD\nEdad del paciente\n\n\nUNI_MED\nUnidad de medida de la edad (1: Años, 2: Meses, 3: Días)\n\n\nSEXO\nSexo del paciente (M = Hombre - F = Mujer)\n\n\nAREA\nÁrea de ocurrencia del caso (1: Cabecera, 2: C. Poblado, 3: Rural)\n\n\nPER_ETN\nPertenencia Étnica\n\n\nestrato\nEstrato socioeconómico\n\n\nDepartamento_ocurrencia\nDepartamento de ocurrencia del caso\n\n\nMunicipio_ocurrencia\nMunicipio de ocurrencia del caso\n\n\nEstado_final_de_caso\nEstado final del paciente (ej. Vivo, Muerto)\n\n\n\nFuente: Estructura de los registros de notificación, SIVIGILA (Instituto Nacional de Salud)\n\n\n\n\n\n\n\n\nCriterios para la Selección de Variables\n\nLa selección inicial de variables se basa en los pilares epidemiológicos de tiempo, persona y lugar.\nSe eligieron variables temporales (FEC_NOT, SEMANA) para analizar la estacionalidad del evento; demográficas (EDAD, SEXO, PER_ETN) para definir los perfiles de mayor riesgo; y geográficas (Departamento_ocurrencia, AREA, estrato) para identificar focos de concentración y el contexto socioeconómico. Adicionalmente, se incluyó el Estado_final_de_caso para evaluar la severidad.\nEste conjunto enfocado proporciona un marco de análisis robusto para una primera exploración. Es un punto de partida que podrá ampliarse con otras variables si análisis posteriores así lo requieren.\n\n\n\n2.1.3 Datos Faltantes\n\n\n\nTop 20 Variables con Mayor Cantidad de Datos Faltantes\n\n\nVariable\nCantidad de Faltantes\n\n\n\n\nGRU_POB\n10744\n\n\nsem_ges\n10744\n\n\nFEC_DEF\n10744\n\n\nCER_DEF\n10744\n\n\nCBMTE\n10744\n\n\nFM_FUERZA\n10744\n\n\nFM_UNIDAD\n10744\n\n\nFM_GRADO\n10744\n\n\nnom_grupo\n8762\n\n\nFEC_HOS\n7512\n\n\nINI_SIN\n1432\n\n\nCOD_ASE\n1426\n\n\nestrato\n583\n\n\nPartición\n0\n\n\nCONSECUTIVE\n0\n\n\nCOD_EVE\n0\n\n\nFEC_NOT\n0\n\n\nSEMANA\n0\n\n\nANO\n0\n\n\nCOD_PRE\n0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEste gráfico valida el uso de la variable ‘Estrato’ en el análisis.\nA diferencia de otras variables socioeconómicas que fueron descartadas por ausencia total de datos, ‘Estrato’ está completo en un 94.6%. El 5.4% de datos faltantes se considera una proporción minoritaria y manejable, lo que confirma la fiabilidad de esta variable para el estudio.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis Exploratorio de Datos</span>"
+    ]
+  },
+  {
+    "objectID": "Eda.html#distribuciones",
+    "href": "Eda.html#distribuciones",
+    "title": "2  Análisis Exploratorio de Datos",
+    "section": "2.2 Distribuciones",
+    "text": "2.2 Distribuciones\n\n2.2.1 Distribución de casos por meses y semana\n\n\n\n\n\n\n\n\n\n\nEl año 2020 presentó dos picos de casos de desnutrición. El más alto ocurrió al inicio del año, en enero y febrero, superando los 1,400 casos mensuales.\nUn segundo pico, de menor intensidad, se registró en octubre. El mes con la menor cantidad de casos fue abril.\n\n\n\n2.2.2 Distribución por edad y sexo\n\n\n\n\n\n\n\n\n\n\nLa distribución de casos de desnutrición aguda se concentra de manera significativa en el primer año de vida, siendo este el grupo de edad con la mayor cantidad de reportes tanto para el sexo masculino (1,901 casos) como para el femenino (1,657 casos).\nA partir del primer año, el número de casos desciende progresivamente con la edad. Además, se observa una tendencia consistente: en casi todos los grupos de edad, el número de casos reportados en hombres es ligeramente superior al de las mujeres.\n\n\n\n2.2.3 Distribución por Nacimientos\n\n\n\n\n\n\n\n\n\n\nSe observa una ligera tendencia al alza en los nacimientos de la segunda mitad del año, alcanzando el punto más alto en octubre con 1,001 casos. El mes con la menor cantidad de casos registrados corresponde a los nacidos en febrero (806 casos). En general, la distribución no sugiere una estacionalidad marcada en los nacimientos de la población afectada.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis Exploratorio de Datos</span>"
+    ]
+  },
+  {
+    "objectID": "Eda.html#localización",
+    "href": "Eda.html#localización",
+    "title": "2  Análisis Exploratorio de Datos",
+    "section": "2.3 Localización",
+    "text": "2.3 Localización\n\n2.3.1 Distribución de Casos por Departamento\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTop 20 Departamentos por Número de Casos Reportados\n\n\nDepartamento\nNº de Casos\n% del Total\n\n\n\n\nBOGOTA\n1,729\n\n\n\n   16.09\n\n\n\nGUAJIRA\n1,124\n\n\n\n   10.46\n\n\n\nANTIOQUIA\n711\n\n\n\n   6.62\n\n\n\nCUNDINAMARCA\n614\n\n\n\n   5.71\n\n\n\nVALLE\n539\n\n\n\n   5.02\n\n\n\nCESAR\n471\n\n\n\n   4.38\n\n\n\nNARIÑO\n458\n\n\n\n   4.26\n\n\n\nNORTE SANTANDER\n444\n\n\n\n   4.13\n\n\n\nMAGDALENA\n394\n\n\n\n   3.67\n\n\n\nCORDOBA\n345\n\n\n\n   3.21\n\n\n\nBOYACA\n318\n\n\n\n   2.96\n\n\n\nATLANTICO\n295\n\n\n\n   2.75\n\n\n\nCHOCO\n261\n\n\n\n   2.43\n\n\n\nHUILA\n254\n\n\n\n   2.36\n\n\n\nARAUCA\n224\n\n\n\n   2.08\n\n\n\nMETA\n224\n\n\n\n   2.08\n\n\n\nBOLIVAR\n219\n\n\n\n   2.04\n\n\n\nSANTANDER\n219\n\n\n\n   2.04\n\n\n\nCAUCA\n218\n\n\n\n   2.03\n\n\n\nTOLIMA\n205\n\n\n\n   1.91\n\n\n\n\n\n\n\n\n\n\n2.3.2 Geolocalización Nacional\n\n\n\n\n\n\n\nEl mapa muestra una concentración de casos de desnutrición en las regiones del norte y occidente del país. Los departamentos con el mayor número de casos reportados, identificados por los tonos más oscuros de rojo en el mapa, son La Guajira y Bogotá, D.C. Esto indica que la desnutrición no solo afecta a las áreas rurales tradicionalmente asociadas con la pobreza, sino que también es un problema significativo en los principales centros urbanos y en las regiones fronterizas.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis Exploratorio de Datos</span>"
+    ]
+  },
+  {
+    "objectID": "Eda.html#grupo-etarios",
+    "href": "Eda.html#grupo-etarios",
+    "title": "2  Análisis Exploratorio de Datos",
+    "section": "2.4 Grupo Etarios",
+    "text": "2.4 Grupo Etarios\n\n2.4.1 Caso por grupo étnico\n\n\n\n\n\n\n\n\n\n\nEl análisis por grupo étnico muestra una fuerte concentración de casos en la comunidad Wayuu, con 859 reportes.\nEsta cifra evidencia una brecha significativa, siendo más de cinco veces mayor que la del siguiente grupo indígena identificado, los Sikuani (162 casos). La categoría “Otro”, con 615 casos, refleja la diversidad de otras etnias también afectadas por la desnutrición.\n\n\n\n2.4.2 Pertinencia ética\n\n\n\n\n\n\n\n\n\n\n\n2.4.3 Casos confirmados vs. no confirmados\n\n\n\n\n\n\n\n\n\n\n\n2.4.4 Hospitales con más casos\n\n\n\n\n\n\n\n\n\n\nEl Hospital San José de Maicao (La Guajira) y la USS Meissen (Bogotá) son las dos instituciones con el mayor número de reportes, con 119 y 114 casos respectivamente.\nEste patrón indica que estas dos entidades actúan como los principales centros de referencia para la desnutrición en sus respectivas regiones, reflejando la alta incidencia del problema tanto en La Guajira como en la capital del país.\n\n\n\n2.4.5 Caso de desnutrición semana epidemilogica\n\n\n\n\n\n\n\n\n\n\n1. Instituto Nacional de Salud. Sistema nacional de vigilancia en salud pública (sivigila) [Internet]. 2025 [cited 2025 Aug 28]. Available from: https://www.ins.gov.co/Direcciones/Vigilancia/Paginas/SIVIGILA.aspx",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis Exploratorio de Datos</span>"
+    ]
+  },
+  {
+    "objectID": "MedFrecu.html",
+    "href": "MedFrecu.html",
+    "title": "3  Medidas de Frecuencias",
+    "section": "",
+    "text": "3.1 Cálculo de la Razón Hombre:Mujer",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Medidas de Frecuencias</span>"
+    ]
+  },
+  {
+    "objectID": "MedFrecu.html#cálculo-de-la-razón-hombremujer",
+    "href": "MedFrecu.html#cálculo-de-la-razón-hombremujer",
+    "title": "3  Medidas de Frecuencias",
+    "section": "",
+    "text": "La razón es una medida de frecuencia que compara dos cantidades que no se contienen entre sí. En este caso, comparamos el número de casos de desnutrición en hombres con el número de casos en mujeres.\n\nPaso 1: Identificar los datos necesarios\n\nPrimero, obtenemos el conteo de casos para cada grupo de la base de datos.\n\n\n\nTabla 1: Frecuencia de casos de desnutrición por sexo. Razón Hombres:Mujeres = 1.17. Fuente: SIVIGILA, 2020.\n\n\nSexo\nNúmero de Casos\n\n\n\n\nMujeres\n4951\n\n\nHombres\n5793\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPaso 2: Definir la fórmula matemática\n\nLa fórmula para calcular la razón es un simple cociente entre los dos grupos que queremos comparar.\n\\[\\text{Razón} = \\frac{\\text{Número de casos en Hombres}}{\\text{Número de casos en Mujeres}}\\]\n\nPaso 3: Realizar el cálculo\n\nSustituimos los valores de los casos en la fórmula.\n\\[\\text{Razón} = \\frac{5,793}{4,951} \\approx 1.17\\]\nEsto significa que por cada caso de desnutrición en una mujer, hay 1.17 casos en hombres, lo que confirma que la condición fue más frecuente en el sexo masculino en esta población.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Medidas de Frecuencias</span>"
+    ]
+  },
+  {
+    "objectID": "MedFrecu.html#tasa",
+    "href": "MedFrecu.html#tasa",
+    "title": "3  Medidas de Frecuencias",
+    "section": "3.2 Tasa",
+    "text": "3.2 Tasa\n\n3.2.1 Cálculo de tasa de insidencia\n\n3.2.1.1 Cálculo de la Tasa de Incidencia (Menores de 5 años)\n\nLa tasa de incidencia mide el riesgo de que ocurra un evento (en este caso, desnutrición aguda) en una población específica durante un período determinado. Es la medida más importante para entender la velocidad con la que aparecen nuevos casos.\n\nPaso 1: Identificar los datos necesarios\n\nPara este cálculo, necesitamos un numerador (los casos) y un denominador (la población en riesgo).\n\nNúmero de casos en menores de 5 años: 10.744 Fuentes SIVIGILA(1).\nPoblación total de menores de 5 años en Colombia: 3.853.223 Fuente: DANE, Proyecciones de la Población 2020(2).\nPaso 2: Definir la fórmula matemática\n\nLa fórmula para la tasa de incidencia es:\n\\[\\text{Tasa de Incidencia} = \\frac{\\text{Número de Casos Nuevos}}{\\text{Población en Riesgo}} \\times \\text{Factor Multiplicador}\\] Para este análisis, usaremos un factor multiplicador de 1,000 para interpretar el resultado como “casos por cada 1,000 niños”.\n\nPaso 3: Realizar el cálculo\n\nSustituimos los valores en la fórmula:\n\\[\\text{Tasa de Incidencia} = \\frac{10,744}{3,853,223} \\times 1,000 \\approx 2.79\\]\n\nPaso 4: Interpretación del resultado\n\nEl resultado final es 2.79.\nEsto significa que, durante el año 2020, en Colombia se presentaron 2.79 casos nuevos de desnutrición aguda por cada 1,000 niños menores de 5 años.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Medidas de Frecuencias</span>"
+    ]
+  },
+  {
+    "objectID": "MedFrecu.html#proporción",
+    "href": "MedFrecu.html#proporción",
+    "title": "3  Medidas de Frecuencias",
+    "section": "3.3 Proporción",
+    "text": "3.3 Proporción\n\n3.3.1 Cálculo de la Proporción de Casos por Sexo\n\nLa proporción es una medida de frecuencia que muestra qué parte del total de casos corresponde a una categoría específica. Se expresa comúnmente como un porcentaje.\n\nPaso 1: Identificar los datos necesarios\n\nPrimero, obtenemos el conteo de casos para cada sexo y el total de casos de la base de datos.\n\nNúmero de casos en Hombres: 5,793\nNúmero de casos en Mujeres: 4,951\n\nTotal de Casos: 5,793 + 4,951 = 10,744\nFuentes SIVIGILA(1).\n\nPaso 2: Definir la fórmula matemática\n\nLa fórmula para calcular la proporción de una categoría es:\n\\[\\text{Proporción} = \\frac{\\text{Número de casos en la categoría}}{\\text{Número Total de Casos}} \\times 100\\%\\] - Paso 3: Realizar el cálculo para cada sexo\nSustituimos los valores en la fórmula para cada categoría.\n\nProporción en Hombres:\n\n\\[\\text{Proporción}_{\\text{Hombres}} = \\frac{5,793}{10,744} \\times 100\\% \\approx 53.9\\%\\]\n\nProporción en Mujeres: \\[\\text{Proporción}_{\\text{Mujeres}} = \\frac{4,951}{10,744} \\times 100\\% \\approx 46.1\\%\\]\nPaso 4: Interpretación del resultado\n\nLos resultados finales son 53.9% para hombres y 46.1% para mujeres.\nEsto significa que, del total de casos de desnutrición reportados en 2020, el 53.9% correspondieron a hombres y el 46.1% a mujeres, mostrando una mayor proporción de casos en el sexo masculino.\n\n\n\n\n\n\n\n\n\nTabla 2: Proporción de Casos de Desnutrición por Sexo\n\n\nSexo\nNúmero de Casos\nPorcentaje del Total\n\n\n\n\nMujeres\n4951\n46.1%\n\n\nHombres\n5793\n53.9%\n\n\n\nFuente: SIVIGILA, 2020.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1. Instituto Nacional de Salud. Informe del evento desnutrición aguda, moderada y severa en menores de cinco años, colombia, 2020 [Internet]. Instituto Nacional de Salud, Colombia; 2020. Available from: https://www.ins.gov.co/buscador-eventos/Informes%20de%20evento/DESNUTRICI%C3%93N%20AGUDA%20PE%20XIII%202020.pdf\n\n\n2. Departamento Administrativo Nacional de Estadística (DANE). Proyecciones y retroproyecciones de población nacional, departamental y municipal por sexo, grupos quinquenales de edad y edades simples de 0 a 26 años. Periodo 1985-2035 [Internet]. 2020. Available from: https://www.dane.gov.co/index.php/estadisticas-por-tema/demografia-y-poblacion/proyecciones-de-poblacion",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Medidas de Frecuencias</span>"
     ]
   },
   {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "2  Summary",
+    "title": "4  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
@@ -34,7 +124,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "text": "1. Organización Mundial de la Salud. Malnutrición\n[Internet]. 2024. Available from: https://www.who.int/es/news-room/fact-sheets/detail/malnutrition\n\n\n2. UNICEF. Desnutrición infantil [Internet]. 2019.\nAvailable from: https://www.unicef.es/causas/desnutricion-infantil\n\n\n3. Instituto Nacional de Salud. Desnutrición aguda\nen menores de 5 años [Internet]. Instituto Nacional de Salud, Colombia;\n2024. Available from: https://www.ins.gov.co/buscador-eventos/Lineamientos/PRO_DNT%20Aguda%20en%20menores%20de%205%20a%C3%B1os%202024.pdf\n\n\n4. Ministerio de Salud y Protección Social. ABC de\nla atención integral a la desnutrición aguda [Internet]. Ministerio de\nSalud y Protección Social, Colombia; 2016. Available from: https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/PP/SNA/abc-desnutricion-aguda.pdf\n\n\n5. Instituto Nacional de Salud. Sistema nacional\nde vigilancia en salud pública (sivigila) [Internet]. 2025 [cited 2025\nAug 28]. Available from: https://www.ins.gov.co/Direcciones/Vigilancia/Paginas/SIVIGILA.aspx\n\n\n6. Instituto Nacional de Salud. Informe del evento\ndesnutrición aguda, moderada y severa en menores de cinco años,\ncolombia, 2020 [Internet]. Instituto Nacional de Salud, Colombia; 2020.\nAvailable from: https://www.ins.gov.co/buscador-eventos/Informes%20de%20evento/DESNUTRICI%C3%93N%20AGUDA%20PE%20XIII%202020.pdf\n\n\n7. Departamento Administrativo Nacional de\nEstadística (DANE). Proyecciones y retroproyecciones de población\nnacional, departamental y municipal por sexo, grupos quinquenales de\nedad y edades simples de 0 a 26 años. Periodo 1985-2035 [Internet].\n2020. Available from: https://www.dane.gov.co/index.php/estadisticas-por-tema/demografia-y-poblacion/proyecciones-de-poblacion",
     "crumbs": [
       "References"
     ]

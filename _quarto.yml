@@ -1,25 +1,34 @@
 project:
   type: book
+  resources:
+    - images/
 
 book:
   title: "Desnutricion"
-  author: "Msc Jesús D. Zamora Th."
+  author: "Msc Jesús D. Zamora Th. (info.thowinsson@gmail.com)"
   date: "8/24/2025"
   chapters:
     - index.qmd
     - intro.qmd
+    - Eda.qmd
+    - MedFrecu.qmd
     - summary.qmd
     - references.qmd
 
 bibliography: references.bib
-
+csl: vancouver.csl
+include-after-body:
+  - footer.html
+  - _footer.html
+  
 format:
   html:
     theme:
       - cosmo
       - brand
-  pdf:
-    documentclass: scrreprt
+    include-in-header: _header.html
+    code-fold: false
+  
 
 editor: visual
 

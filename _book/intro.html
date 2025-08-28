@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; Introduction – Desnutricion</title>
+<title>1&nbsp; Introducción – Desnutricion</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,46 +20,10 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -85,7 +49,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./Eda.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -124,6 +88,21 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Busca el título del libro dentro del TOC
+  const tocTitle = document.querySelector('#quarto-sidebar .sidebar-title, #TOC .title');
+  if (tocTitle) {
+    const img = document.createElement('img');
+    img.src = 'images/Imagen_portada.png';
+    img.alt = 'Portada';
+    img.style.width = '100%';
+    img.style.borderRadius = '10px';
+    img.style.marginTop = '10px';
+    tocTitle.insertAdjacentElement('afterend', img);
+  }
+});
+</script>
 
 
 </head>
@@ -137,7 +116,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -171,13 +150,25 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./intro.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Análisis Exploratorio de Datos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./MedFrecu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Medidas de Frecuencias</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -199,7 +190,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></h1>
 </div>
 
 
@@ -216,23 +207,116 @@ div.csl-indent {
 </header>
 
 
-<p>This is a book created from markdown and executable code.</p>
-<p>See <span class="citation" data-cites="knuth84">Knuth (<a href="references.html#ref-knuth84" role="doc-biblioref">1984</a>)</span> for additional discussion of literate programming.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/imagen1.jpg" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Este es el pie de foto de mi imagen</figcaption>
+</figure>
 </div>
+<div style="text-align: justify;">
+<p>La desnutrición infantil es una condición que surge por el consumo insuficiente de alimentos, tanto en cantidad como en calidad, y por la presencia recurrente de enfermedades infecciosas y factores sociales adversos que afectan el estado nutricional de la niñez. Este problema impacta principalmente a niñas y niños en sus primeros años de vida y genera graves consecuencias en su desarrollo físico y cognitivo, dependiendo de la severidad. En casos extremos, puede llevar a la muerte si no se recibe atención adecuada y oportuna<span class="citation" data-cites="OMS2024 UNICEF2019">(<a href="references.html#ref-OMS2024" role="doc-biblioref">1</a>,<a href="references.html#ref-UNICEF2019" role="doc-biblioref">2</a>)</span>.</p>
+<p>De acuerdo con el Fondo de las Naciones Unidas para la Infancia (UNICEF), un niño que sufre desnutrición aguda grave tiene hasta nueve veces más probabilidad de morir en comparación con uno que tiene un estado nutricional normal. Esta forma de desnutrición altera todos los procesos vitales y requiere intervención médica urgente<span class="citation" data-cites="INS2024 UNICEF2019">(<a href="references.html#ref-UNICEF2019" role="doc-biblioref">2</a>,<a href="references.html#ref-INS2024" role="doc-biblioref">3</a>)</span>.</p>
+<p>Por ello, es fundamental que padres, madres y cuidadores reconozcan las principales causas y tipos de la desnutrición infantil. Estos incluyen la desnutrición aguda (peso bajo para la talla), desnutrición crónica (retraso del crecimiento) y la deficiencia de micronutrientes como vitaminas y minerales, cada una con señales y consecuencias específicas. Identificar tempranamente los signos de alerta —como pérdida rápida de peso, retraso en el crecimiento o alteraciones clínicas evidentes— permite consultar oportunamente al profesional de salud y evitar complicaciones graves<span class="citation" data-cites="UNICEF2019 MINSALUD2016 INS2024 OMS2024">(<a href="references.html#ref-OMS2024" role="doc-biblioref">1</a>–<a href="references.html#ref-MINSALUD2016" role="doc-biblioref">4</a>)</span>.</p>
 </div>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-knuth84" class="csl-entry" role="listitem">
-Knuth, Donald E. 1984. <span>“Literate Programming.”</span> <em>Comput. J.</em> 27 (2): 97–111. <a href="https://doi.org/10.1093/comjnl/27.2.97">https://doi.org/10.1093/comjnl/27.2.97</a>.
+<div id="refs" class="references csl-bib-body" role="list" style="display: none">
+<div id="ref-OMS2024" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Organización Mundial de la Salud. Malnutrición [Internet]. 2024. Available from: <a href="https://www.who.int/es/news-room/fact-sheets/detail/malnutrition">https://www.who.int/es/news-room/fact-sheets/detail/malnutrition</a></div>
+</div>
+<div id="ref-UNICEF2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">UNICEF. Desnutrición infantil [Internet]. 2019. Available from: <a href="https://www.unicef.es/causas/desnutricion-infantil">https://www.unicef.es/causas/desnutricion-infantil</a></div>
+</div>
+<div id="ref-INS2024" class="csl-entry" role="listitem">
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Instituto Nacional de Salud. Desnutrición aguda en menores de 5 años [Internet]. Instituto Nacional de Salud, Colombia; 2024. Available from: <a href="https://www.ins.gov.co/buscador-eventos/Lineamientos/PRO_DNT%20Aguda%20en%20menores%20de%205%20a%C3%B1os%202024.pdf">https://www.ins.gov.co/buscador-eventos/Lineamientos/PRO_DNT%20Aguda%20en%20menores%20de%205%20a%C3%B1os%202024.pdf</a></div>
+</div>
+<div id="ref-MINSALUD2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Ministerio de Salud y Protección Social. ABC de la atención integral a la desnutrición aguda [Internet]. Ministerio de Salud y Protección Social, Colombia; 2016. Available from: <a href="https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/PP/SNA/abc-desnutricion-aguda.pdf">https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/PP/SNA/abc-desnutricion-aguda.pdf</a></div>
 </div>
 </div>
 
 </main> <!-- /main -->
+
+<div style="border-top: 1px solid #555; margin-top: 20px; padding-top: 10px; 
+color: #888; font-size: 12px;">
+  By Jesús D. Zamora Th.
+  <div style="margin-top: 5px;">
+    © Copyright 2023.
+  </div>
+</div>
+
+<!-- Iconos Bootstrap -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<style>
+.top-right-icons {
+  position: fixed;
+  top: 10px;
+  right: 15px;
+  z-index: 9999;
+  display: flex;
+  gap: 10px;
+}
+.top-right-icons a {
+  color: var(--bs-navbar-color);
+  font-size: 1.3rem;
+  text-decoration: none;
+}
+.top-right-icons a:hover {
+  color: var(--bs-navbar-hover-color);
+}
+</style>
+
+<div class="top-right-icons">
+  <!-- GitHub -->
+  <a href="https://github.com/jthowinsson/Dengue3" target="_blank" title="Repositorio">
+    <i class="bi bi-github"></i>
+  </a>
+
+  <!-- Descargar PDF -->
+  <a href="Dengue3.pdf" download="Dengue3.pdf" title="Descargar PDF">
+    <i class="bi bi-file-earmark-pdf"></i>
+  </a>
+
+  <!-- Descargar Markdown -->
+  <a href="index.md" download="index.md" title="Descargar Markdown">
+    <i class="bi bi-file-earmark-text"></i>
+  </a>
+
+  <!-- Pantalla completa -->
+  <a href="javascript:void(0)" onclick="document.documentElement.requestFullscreen()" title="Pantalla completa">
+    <i class="bi bi-arrows-fullscreen"></i>
+  </a>
+
+  <!-- Light / Dark -->
+  <a href="javascript:void(0)" id="theme-toggle" title="Cambiar tema">
+    <i class="bi bi-sun-fill" id="theme-icon"></i>
+  </a>
+</div>
+
+<script>
+const html = document.documentElement;
+const icon = document.getElementById('theme-icon');
+const toggle = document.getElementById('theme-toggle');
+const saved = localStorage.getItem('quarto-color-scheme');
+
+if (saved === 'dark') {
+  html.setAttribute('data-bs-theme', 'dark');
+  icon.className = 'bi bi-moon-fill';
+}
+
+toggle.addEventListener('click', () => {
+  if (html.getAttribute('data-bs-theme') === 'dark') {
+    html.removeAttribute('data-bs-theme');
+    icon.className = 'bi bi-sun-fill';
+    localStorage.setItem('quarto-color-scheme', 'light');
+  } else {
+    html.setAttribute('data-bs-theme', 'dark');
+    icon.className = 'bi bi-moon-fill';
+    localStorage.setItem('quarto-color-scheme', 'dark');
+  }
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -639,8 +723,8 @@ Knuth, Donald E. 1984. <span>“Literate Programming.”</span> <em>Comput. J.</
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link" aria-label="Summary">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Eda.html" class="pagination-link" aria-label="Análisis Exploratorio de Datos">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Análisis Exploratorio de Datos</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
