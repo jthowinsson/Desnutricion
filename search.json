@@ -110,13 +110,33 @@
     ]
   },
   {
+    "objectID": "Analisis.html",
+    "href": "Analisis.html",
+    "title": "4  Análisis Estádistico",
+    "section": "",
+    "text": "4.1 Carga de Datos",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Análisis Estádistico</span>"
+    ]
+  },
+  {
+    "objectID": "Analisis.html#carga-de-datos",
+    "href": "Analisis.html#carga-de-datos",
+    "title": "4  Análisis Estádistico",
+    "section": "",
+    "text": "4.1.1 Preparación del Módelo\n\n\n\n\n\n\n\n\n\n\n\n4.1.2 Independencia\n\n“Se asume el cumplimiento del supuesto de independencia de las observaciones, dado que cada registro en la base de datos corresponde a un individuo único.”\n\n\n\n4.1.3 Prueba de Multicolinealidad (VIF)\n\n\n                  GVIF Df GVIF^(1/(2*Df))\nedad_en_meses 1.001165  1        1.000583\nsexo          1.001068  1        1.000534\narea          1.000200  2        1.000050\n\n\n\nAusencia de Multicolinealidad (Resultados VIF)\nInterpretación: Todos los valores son muy cercanos a 1, lo que indica que no hay problemas de multicolinealidad. El supuesto se cumple\n\n\n\n4.1.4 Prueba de Linealidad del Logit\n\n\n\n\n\n\n\n\n\n\n\n4.1.5 Estimación del Módelo Logit\n\n\n\n\n\n\n\n\nTabla: Modelo de Regresión Logística para la Predicción de Casos en Población Indígena\n\n\nVariable\nOdds Ratio (OR)\nIC 95% Inferior\nIC 95% Superior\nValor p\n\n\n\n\n(Intercept)\n0.074\n0.065\n0.084\n0.000\n\n\nedad_en_meses\n0.995\n0.991\n1.000\n3.065 × 10−2\n\n\nsexoF\n1.055\n0.945\n1.179\n3.420 × 10−1\n\n\narea2\n2.583\n2.114\n3.140\n5.255 × 10−21\n\n\narea3\n16.026\n14.223\n18.087\n0.000\n\n\n\nFuente: SIVIGILA, 2020.\n\n\n\n\n\n\n\n\n\n\n4.1.6 Evaluación del Módelo\n\n\n4.1.7 Significancia del Módelo\n\n\n\n\n\n\n\n\nTabla: Prueba de Significancia del Modelo (Análisis de Varianza)\n\n\nterm\ndf\ndeviance\ndf.residual\nresidual.deviance\np.value\n\n\n\n\nNULL\nNA\nNA\n10,743.000\n10,663.889\nNA\n\n\nedad_en_meses\n1.000\n8.198\n10,742.000\n10,655.691\n0.004\n\n\nsexo\n1.000\n1.609\n10,741.000\n10,654.082\n0.205\n\n\narea\n2.000\n2,523.939\n10,739.000\n8,130.143\n0.000\n\n\n\nFuente: SIVIGILA, 2020.\n\n\n\n\n\n\n\n\n\n\n4.1.8 Matriz de confución y métricas de ajuste\n\n\n\n\n\n\n\n\nTabla X: Métricas de Ajuste del Modelo\n\n\nMetrica\nValor\n\n\n\n\nPrecisión General (Accuracy)\n0.817\n\n\nSensibilidad (Sensitivity)\n0.850\n\n\nEspecificidad (Specificity)\n0.685\n\n\n\nFuente: SIVIGILA, 2020.\n\n\n\n\n\n\n\n\n\n\n4.1.9 Curva de ROC y AUC\n\n\nÁrea Bajo la Curva (AUC): 0.804",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Análisis Estádistico</span>"
+    ]
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "4  Summary",
+    "title": "5  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
