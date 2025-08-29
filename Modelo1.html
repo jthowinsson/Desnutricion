@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./references.html" rel="next">
 <link href="./MedFrecu.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -181,12 +181,6 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="./Modelo1.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo de Regresión Logística</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -810,6 +804,20 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <blockquote class="blockquote">
 <p>Según el modelo logístico ajustado, un niño varón de <strong>24 meses</strong>, residente en <strong>área urbana (área = 1)</strong>, con condición de <strong>desplazamiento</strong> y <strong>sin discapacidad</strong>, presenta una <strong>probabilidad estimada de hospitalización del 14.8%</strong>.</p>
 </blockquote>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                                       Variable    PR  LI95  LS95  p_value
+(Intercept)                         (Intercept) 0.541 0.498 0.588 1.60e-47
+ns(edad_meses, df = 3)1 ns(edad_meses, df = 3)1 0.410 0.344 0.490 9.08e-23
+ns(edad_meses, df = 3)2 ns(edad_meses, df = 3)2 0.179 0.148 0.215 3.45e-73
+ns(edad_meses, df = 3)3 ns(edad_meses, df = 3)3 0.210 0.173 0.254 5.91e-57
+area2                                     area2 0.973 0.880 1.076 5.99e-01
+area3                                     area3 1.025 0.961 1.092 4.53e-01
+sexoM                                     sexoM 0.981 0.927 1.037 4.93e-01
+gp_despl                               gp_despl 0.769 0.555 1.065 1.14e-01
+gp_disca                               gp_disca 1.332 0.942 1.884 1.04e-01</code></pre>
+</div>
+</div>
 
 
 </section>
@@ -1303,8 +1311,8 @@ toggle.addEventListener('click', () => {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link" aria-label="Summary">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
