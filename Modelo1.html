@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Modelo de Regresión Logistica – Desnutricion</title>
+<title>4&nbsp; Modelo de Regresión Logística – Desnutricion</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -128,7 +128,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Modelo1.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo de Regresión Logistica</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Modelo1.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo de Regresión Logística</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -180,7 +180,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Modelo1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo de Regresión Logistica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo de Regresión Logística</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -221,6 +221,7 @@ window.Quarto = {
   <li><a href="#tabla-or" id="toc-tabla-or" class="nav-link" data-scroll-target="#tabla-or"><span class="header-section-number">4.3.1</span> Tabla OR</a></li>
   <li><a href="#auc" id="toc-auc" class="nav-link" data-scroll-target="#auc"><span class="header-section-number">4.3.2</span> AUC</a></li>
   <li><a href="#predicción" id="toc-predicción" class="nav-link" data-scroll-target="#predicción"><span class="header-section-number">4.3.3</span> Predicción</a></li>
+  <li><a href="#predicción-para-un-perfil-ejemplo" id="toc-predicción-para-un-perfil-ejemplo" class="nav-link" data-scroll-target="#predicción-para-un-perfil-ejemplo"><span class="header-section-number">4.3.4</span> Predicción para un perfil ejemplo</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -230,7 +231,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo de Regresión Logistica</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo de Regresión Logística</span></h1>
 </div>
 
 
@@ -265,14 +266,16 @@ window.Quarto = {
 = \big(\hat{\beta}_{0},\; \hat{\beta}_{\text{edad\_meses}},\; \hat{\beta}_{\text{Sexo=M}},\;
 \hat{\beta}_{\text{Area=2}},\; \hat{\beta}_{\text{Area=3}},\;
 \hat{\beta}_{\text{desplazado=1}},\; \hat{\beta}_{\text{discapacidad=1}}\big)^{\top}
-\]</span> B.<code>Probabilidad estimada para un individuo</code></p>
+\]</span></p>
+<p>B.<code>Probabilidad estimada para un individuo</code></p>
 <p>La probabilidad de hospitalización para un menor con desnutrición, dado su perfil, se define como:</p>
 <p><span class="math display">\[
 \hat{p}_{i}
 = P\!\left(\text{hospitalización}=1 \;\middle|\; \text{edad\_meses}_{i},\;
 \text{sexo}_{i},\; \text{área}_{i},\;
 \text{desplazado}_{i},\; \text{discapacidad}_{i}\right)
-\]</span> donde:</p>
+\]</span></p>
+<p>donde:</p>
 <p><span class="math inline">\(\text{edad\_meses}_{i}\)</span>, <span class="math inline">\(\text{sexo}_{i}\)</span>, <span class="math inline">\(\text{area}_{i}\)</span>, <span class="math inline">\(\text{desplazado}_{i}\)</span> y <span class="math inline">\(\text{discapacidad}_{i}\)</span> son los valores de las covariables del individuo <span class="math inline">\(i\)</span>.</p>
 </div>
 <section id="mapeo-de-variables" class="level3" data-number="4.1.1">
@@ -436,7 +439,8 @@ window.Quarto = {
 + \hat{\beta}_{\text{discapacidad=1}_i}
 \Big)
 }
-\]</span> Interpretación de los componentes (odds ratios, OR):</p>
+\]</span></p>
+<p>Interpretación de los componentes (odds ratios, OR):</p>
 <p><span class="math inline">\(\beta_{\text{edad\_meses}}\)</span> Cambio en el log-odds (y OR <span class="math inline">\(=e^{\beta}\)</span>) de hospitalización por cada mes adicional de la edad.</p>
 <p><span class="math inline">\(\beta_{\text{sexo=M}}\)</span> Diferencia de hospitalización en niños (M) frente a niñas (F, referencia): <span class="math inline">\(\text{OR} = e^{\beta_{\text{Sexo=M}}}\)</span>.</p>
 <p><span class="math inline">\(\beta_{\text{area=2}},; \beta_{\text{Area=3}}\)</span> Efecto del área 2 y 3 respecto a área 1 (referencia): <span class="math inline">\(\text{OR} = e^{\beta_{\text{Area=k}}}\)</span>.</p>
@@ -556,7 +560,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 <div style="text-align: justify;">
-<p>Interpretación - El modelo con spline (curvo) ajusta significativamente mejor que el modelo lineal, esto significa que la relación entre la edad y la probabilidad de hospitalización no es lineal. - En la práctica: el riesgo de hospitalización no baja siempre en la misma proporción mes a mes, sino que cambia según la edad (cae más rápido en los primeros meses, luego se estabiliza).</p>
+<p><strong>Interpretación</strong></p>
+<ul>
+<li>El modelo con spline (curvo) ajusta significativamente mejor que el modelo lineal, esto significa que la relación entre la edad y la probabilidad de hospitalización no es lineal.</li>
+<li>En la práctica: el riesgo de hospitalización no baja siempre en la misma proporción mes a mes, sino que cambia según la edad (cae más rápido en los primeros meses, luego se estabiliza).</li>
+</ul>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -569,7 +577,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 <div style="text-align: justify;">
 <p>Tendencia general:A medida que aumenta la edad, la probabilidad de hospitalización disminuye, es decir, los niños más pequeños tienen mayor riesgo de hospitalización que los mayores. Después de ~30 meses, las curvas casi se superponen (el efecto de la edad se estabiliza).</p>
-<p>Conclusión: “<code>El riesgo de hospitalización disminuye con la edad</code>, siendo más elevado en los primeros meses de vida. El modelo con spline mostró que la reducción no es lineal: la probabilidad cae rápidamente en la primera infancia y se estabiliza a partir de los 30 meses, en concordancia con la prueba LRT (p &lt; 0.001).”</p>
+<p>Conclusión:</p>
+<p>“<code>El riesgo de hospitalización disminuye con la edad</code>, siendo más elevado en los primeros meses de vida. El modelo con spline mostró que la reducción no es lineal: la probabilidad cae rápidamente en la primera infancia y se estabiliza a partir de los 30 meses, en concordancia con la prueba LRT (p &lt; 0.001).”</p>
 </div>
 </section>
 <section id="multicolinealidad-vif-gvif" class="level3" data-number="4.2.2">
@@ -706,7 +715,101 @@ Real    0    1
 <pre><code>
 Prob. estimada de hospitalización (perfil ejemplo): 0.148 </code></pre>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = hosp ~ edad_meses + area + sexo + gp_despl + gp_disca, 
+    family = binomial(), data = df_mod)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -0.102125   0.045527  -2.243   0.0249 *  
+edad_meses  -0.050902   0.002139 -23.799   &lt;2e-16 ***
+area2       -0.035403   0.077767  -0.455   0.6489    
+area3        0.033777   0.049877   0.677   0.4983    
+sexoM       -0.033376   0.043607  -0.765   0.4441    
+gp_despl    -0.395809   0.224162  -1.766   0.0774 .  
+gp_disca     0.439490   0.315856   1.391   0.1641    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 13141  on 10743  degrees of freedom
+Residual deviance: 12413  on 10737  degrees of freedom
+AIC: 12427
+
+Number of Fisher Scoring iterations: 4</code></pre>
 </div>
+</div>
+</section>
+<section id="predicción-para-un-perfil-ejemplo" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="predicción-para-un-perfil-ejemplo"><span class="header-section-number">4.3.4</span> Predicción para un perfil ejemplo</h3>
+<p><strong>Perfil evaluado</strong></p>
+<ul>
+<li><code>Edad</code> = <strong>24 meses</strong></li>
+<li><code>Área</code> = <strong>1</strong> (categoría de referencia → dummies: <code>Area=2</code> =0, <code>Area=3</code> =0)</li>
+<li><code>Sexo</code> = <strong>Masculino</strong> (<code>Sexo=M</code> = 1)</li>
+<li><code>Desplazado</code> = <strong>Sí</strong> (<code>Desplazado=1</code> = 1)</li>
+<li><code>Discapacidad</code> = <strong>No</strong> (<code>Discapacidad=1</code> = 0)</li>
+</ul>
+<p><strong>Modelo logit (forma lineal en el logit)</strong></p>
+<p><span class="math display">\[
+\text{logit}(\hat{p}_i)
+= \hat{\beta}_{0}
++ \hat{\beta}_{\text{edad\_meses}_i}
++ \hat{\beta}_{\text{sexo=M}_i}
++ \hat{\beta}_{\text{area=2}_i}
++ \hat{\beta}_{\text{area=3}_i}
++ \hat{\beta}_{\text{desplazado=1}_i}
++ \hat{\beta}_{\text{discapacidad=1}_i}
+\]</span></p>
+<p><strong>Modelo logit estimado (con coeficientes):</strong></p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{logit}(\hat{p}_i) \;=&amp;\;
+-0.102125
+- 0.050902\,\text{edad\_meses}_i
+- 0.035403\,(\text{Area}=2)_i
++ 0.033777\,(\text{Area}=3)_i \\
+&amp;\; - 0.033376\,(\text{Sexo}=M)_i
+- 0.395809\,(\text{Desplazado}=1)_i
++ 0.439490\,(\text{Discapacidad}=1)_i
+\end{aligned}
+\]</span> <strong>Sustitución con los valores del perfil:</strong></p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{logit}(\hat{p}_i)
+=&amp;\; -0.102125
+- 0.050902 \cdot 24
+- 0.035403 \cdot 0
++ 0.033777 \cdot 0 \\
+&amp;\; - 0.033376 \cdot 1
+- 0.395809 \cdot 1
++ 0.439490 \cdot 0
+\end{aligned}
+\]</span></p>
+<p><strong>Cálculo del logit (paso a paso):</strong></p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{logit}(\hat{p}_i)
+&amp;= -0.102125
+- 1.221648
+- 0.033376
+- 0.395809 \\
+&amp;= -1.752958
+\end{aligned}
+\]</span></p>
+<p><strong>Probabilidad estimada (función sigmoide):</strong></p>
+<p><span class="math display">\[
+\hat{p}_i
+= \frac{e^{-1.752958}}{1 + e^{-1.752958}}
+\;\approx\; 0.148
+\;\Rightarrow\; \mathbf{14.8\%}
+\]</span></p>
+<blockquote class="blockquote">
+<p>Según el modelo logístico ajustado, un niño varón de <strong>24 meses</strong>, residente en <strong>área urbana (área = 1)</strong>, con condición de <strong>desplazamiento</strong> y <strong>sin discapacidad</strong>, presenta una <strong>probabilidad estimada de hospitalización del 14.8%</strong>.</p>
+</blockquote>
 
 
 </section>
